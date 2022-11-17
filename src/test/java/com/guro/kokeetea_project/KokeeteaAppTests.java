@@ -10,4 +10,5 @@ class KokeeteaAppTests {
 	@Test
 	void contextLoads() {
 	}
+
 }
