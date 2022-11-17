@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        function deleteStore(full, store) {
+            var yes = confirm("정말 삭제하겠습니까?\n\n가맹점 이름: "+store.name)
+            if (!yes) {
+                return false;
+            }
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/store/delete/" + store.id;
+            if (full) {
+                url += "/full"
+            }
+            var paramData = {
+                id : store.id,
+            };
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url : url,
+                type : "POST",
+                contentType : "application/json",
+                data : param,
+                beforeSend : function (xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache : false,
+                success : function (result, status){
+                    alert("가맹점을 삭제하였습니다.");
+                    location.href='/store/list/' + [[${page}]];
+                },
+                error : function (jqXHR, status, error){
+                    alert(jqXHR.responseText);
+                    location.href='/store/list/' + [[${page}]];
+                }
+            });
+
+            return true;
+        }
+    </script>
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+
+    <form role="form" method="get" th:object="${stores}">
+        <table class="table">
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>이름</td>
+                <td>위치</td>
+                <td>전화번호</td>
+                <td>이메일</td>
+                <td>배정 창고</td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="store, status: ${stores.getContent()}">
+                <td th:text="${store.id}"></td>
+                <td>
+                    <a th:text="${store.name}"></a>
+                </td>
+                <td th:text="${store.location}"></td>
+                <td th:text="${store.phone}"></td>
+                <td th:text="${store.email}"></td>
+                <td th:text="${store.warehouseName}"></td>
+                <td>
+                    <input type="button" class="btn btn-primary" value="삭제" th:onclick="deleteStore(false, [[${store}]])">
+                    <input type="button" class="btn btn-primary" value="수정" th:onclick="location.href='/store/update/'+[[${store.id}]]">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:with="start=${(stores.number/maxPage)*maxPage + 1}, end=(${(stores.totalPages == 0) ? 1 : (start + (maxPage - 1) < stores.totalPages ? start + (maxPage - 1) : stores.totalPages)})" >
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item" th:classappend="${stores.first}?'disabled'">
+                    <a th:href="'/store/list/' + ${stores.number}" aria-label='Previous' class="page-link">
+                        <span aria-hidden='true'>Previous</span>
+                    </a>
+                </li>
+
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${stores.number eq page-1}?'active':''">
+                    <a th:href="'/store/list/' + ${page}" th:inline="text" class="page-link">[[${page}]]</a>
+                </li>
+
+                <li class="page-item" th:classappend="${stores.last}?'disabled'">
+                    <a th:href="'/store/list/' + ${stores.number+2}" aria-label='Next' class="page-link">
+                        <span aria-hidden='true'>Next</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+        <input th:formaction="@{/store/create}" type="submit" class="btn btn-primary" value="등록">
+    </form>
+
+</div>
+
+</html>

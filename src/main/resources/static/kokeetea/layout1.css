@@ -1,0 +1,35 @@
+body{
+    background-color: #f9fbfd;
+}
+.container-fluid {
+    width: 100%;
+}
+
+.fieldError {
+    color: red;
+}
+.card{
+    margin-bottom: 30px;
+    flex-direction: column;
+    background:#fff;
+    box-shadow: 0 3px 9px 0 rgb(169 184 200 / 15%);
+    border:none;
+    margin-left: 20px;
+    margin-right:20px;
+}
+
+.logo-icon{float:left; width:10px; height:10px;}
+.logo-text{float:left; padding-top: 10px;
+    margin-left: 15px;
+    color: #000;
+    font-size: 15px;
+    margin-left: 35px;}
+.logo-text span{width:50px; color:#000; font-weight:bold;}
+
+.ct-chart-bar{
+    padding-left: 10px;
+    padding-top: 20px;
+}
+.card-group{
+    margin-bottom:50px;
+}
