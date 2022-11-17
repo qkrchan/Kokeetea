@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Kokeetea</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/images/favicon.png}">
+
+    <link th:href="@{/opensource/assets/extra-libs/c3/c3.min.css}" rel="stylesheet">
+    <link th:href="@{/opensource/assets/libs/chartist/dist/chartist.min.css}" rel="stylesheet">
+    <link th:href="@{/opensource/assets/extra-libs/jvector/jquery-jvectormap-2.0.2.css}" rel="stylesheet">
+    <link th:href="@{/opensource/dist/css/style.min.css}" rel="stylesheet">
+
+    <link th:href="@{/kokeetea/layout1.css}" rel="stylesheet">
+
+    <script th:src="@{/opensource/assets/libs/jquery/dist/jquery.min.js}"></script>
+    <script th:src="@{/opensource/assets/libs/popper.js/dist/umd/popper.min.js}"></script>
+    <script th:src="@{/opensource/assets/libs/bootstrap/dist/js/bootstrap.min.js}"></script>
+
+    <script th:src="@{/opensource/dist/js/app-style-switcher.js}"></script>
+    <script th:src="@{/opensource/dist/js/feather.min.js}"></script>
+    <script th:src="@{/opensource/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js}"></script>
+    <script th:src="@{/opensource/dist/js/sidebarmenu.js}"></script>
+    <script th:src="@{/opensource/dist/js/custom.min.js}"></script>
+
+    <script th:src="@{/opensource/assets/extra-libs/c3/d3.min.js}"></script>
+    <script th:src="@{/opensource/assets/extra-libs/c3/c3.min.js}"></script>
+    <script th:src="@{/opensource/assets/libs/chartist/dist/chartist.min.js}"></script>
+    <script th:src="@{/opensource/assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js}"></script>
+    <script th:src="@{/opensource/assets/extra-libs/jvector/jquery-jvectormap-2.0.2.min.js}"></script>
+    <script th:src="@{/opensource/assets/extra-libs/jvector/jquery-jvectormap-world-mill-en.js}"></script>
+    <script th:src="@{/opensource/dist/js/pages/dashboards/dashboard1.min.js}"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+    <th:block layout:fragment="script"></th:block>
+    <th:block layout:fragment="css"></th:block>
+
+    <script th:inline="javascript" th:if="${#ctx.containsVariable('errorMessage')}">
+        $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]]
+            if (errorMessage != null) {
+                alert(errorMessage);
+            }
+        });
+    </script>
+</head>
+<body>
+<div class="preloader">
+    <div class="lds-ripple">
+        <div class="lds-pos"></div>
+        <div class="lds-pos"></div>
+    </div>
+</div>
+<div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+     data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
+
+    <div th:replace="fragments/topmenu::topmenu"></div>
+
+    <div th:replace="fragments/sidemenu::sidemenu"></div>
+
+    <div class="page-wrapper">
+        <div class="container-fluid">
+            <div layout:fragment="content"></div>
+
+
+            <div th:replace="fragments/footer::footer"></div>
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
+</div>
+</body>
+</html>
