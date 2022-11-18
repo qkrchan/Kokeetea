@@ -55,8 +55,8 @@
                         </a>
                     </li>
                     <li class="sidebar-item" sec:authorize="hasAnyAuthority('ROLE_USER')">
-                        <a class="sidebar-link has-arrow" th:href="@{/request/mylist}" aria-expanded="false">
-                            <i data-feather="feather" class="feather-icon"></i>
+                        <a class="sidebar-link sidebar-link" th:href="@{/request/mylist}" aria-expanded="false">
+                            <i data-feather="lock" class="feather-icon"></i>
                             <span class="hide-menu">발주 내역</span>
                         </a>
                     </li>

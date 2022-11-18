@@ -44,8 +44,3 @@ body{
     transform: translate(-50%, -50%);
 }
 
-img:hover {
-    width:20px;
-    transform:scale(1.5);
-    transition: transform.5s;
-}
