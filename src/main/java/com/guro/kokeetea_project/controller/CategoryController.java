@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Optional;
 
 @Controller
@@ -27,7 +28,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping(value = {"/category/list","/category/list/{page}"})
-    public String listCategory(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash){
+    public String listCategory(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash, Principal principal){
         try {
             Pageable pageable = PageRequest.of(page.orElse(1)-1, 5);
             Page<CategoryInfoDTO> categoryList = categoryService.list(pageable);
@@ -37,52 +38,61 @@ public class CategoryController {
             model.addAttribute("maxPage", 5);
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "목록 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/";
         }
+        model.addAttribute("username", principal.getName());
         return "category/list";
     }
 
     @GetMapping(value = "/category/create")
-    public String createCategory(Model model){
+    public String createCategory(Model model, Principal principal){
         model.addAttribute("categoryFormDTO", new CategoryFormDTO());
+        model.addAttribute("username", principal.getName());
         return "category/create";
     }
 
     @PostMapping(value = "/category/create")
-    public String createCategoryPost(@Valid CategoryFormDTO categoryFormDTO, BindingResult bindingResult, RedirectAttributes flash){
+    public String createCategoryPost(@Valid CategoryFormDTO categoryFormDTO, BindingResult bindingResult, RedirectAttributes flash, Model model, Principal principal){
         try {
             if (bindingResult.hasErrors()){
+                model.addAttribute("username", principal.getName());
                 return "category/create";
             }
             categoryService.create(categoryFormDTO);
         } catch (Exception e){
             flash.addFlashAttribute("errorMessage", "재료 등록 중 에러가 발생하였습니다.");
         }
+        model.addAttribute("username", principal.getName());
         return "redirect:/category/list";
     }
 
     @GetMapping(value = "/category/update/{id}")
-    public String updateCategory(@PathVariable("id") Long id, Model model, RedirectAttributes flash){
+    public String updateCategory(@PathVariable("id") Long id, Model model, RedirectAttributes flash, Principal principal){
         try {
             CategoryFormDTO categoryFormDTO = categoryService.original(id);
             model.addAttribute("categoryFormDTO", categoryFormDTO);
+            model.addAttribute("username", principal.getName());
             return "category/create";
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/category/list";
         }
     }
 
     @PostMapping(value = "/category/update")
-    public String updateCategoryPost(@Valid CategoryFormDTO categoryFormDTO, BindingResult bindingResult, RedirectAttributes flash){
+    public String updateCategoryPost(@Valid CategoryFormDTO categoryFormDTO, BindingResult bindingResult, RedirectAttributes flash, Model model, Principal principal){
         try {
             if (bindingResult.hasErrors()){
+                model.addAttribute("username", principal.getName());
                 return "category/create";
             }
             categoryService.update(categoryFormDTO);
         } catch (Exception e){
             flash.addFlashAttribute("errorMessage", "재료 수정 중 에러가 발생하였습니다.");
         }
+        model.addAttribute("username", principal.getName());
         return "redirect:/category/list";
     }
 

@@ -31,7 +31,7 @@ public class RequestController {
     private final RequestService requestService;
 
     @GetMapping(value = {"/request/list","/request/list/{page}"})
-    public String listRequest(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash){
+    public String listRequest(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash, Principal principal){
         try {
             Pageable pageable = PageRequest.of(page.orElse(1)-1, 10);
             Page<RequestInfoDTO> requestList = requestService.list(pageable);
@@ -41,9 +41,10 @@ public class RequestController {
             model.addAttribute("maxPage", 5);
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "목록 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/";
         }
-        
+        model.addAttribute("username", principal.getName());
         return "request/list";
     }
 
@@ -58,38 +59,42 @@ public class RequestController {
             model.addAttribute("maxPage", 5);
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "목록 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/";
         }
-        
+        model.addAttribute("username", principal.getName());
         return "request/mylist";
     }
 
     @GetMapping(value = "/request/create")
-    public String createRequest(Model model, RedirectAttributes flash){
+    public String createRequest(Model model, RedirectAttributes flash, Principal principal){
         try {
             model.addAttribute("requestFormDTO", new RequestFormDTO());
             model.addAttribute("ingredients", requestService.ingredients());
             model.addAttribute("stores", requestService.stores());
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/request/mylist";
         }
-        
+        model.addAttribute("username", principal.getName());
         return "request/create";
     }
 
     @PostMapping(value = "/request/create")
-    public String createRequestPost(@Valid RequestFormDTO requestFormDTO, BindingResult bindingResult, Model model, RedirectAttributes flash){
+    public String createRequestPost(@Valid RequestFormDTO requestFormDTO, BindingResult bindingResult, Model model, RedirectAttributes flash, Principal principal){
         try {
             if (bindingResult.hasErrors()){
                 model.addAttribute("ingredients", requestService.ingredients());
                 model.addAttribute("stores", requestService.stores());
+                model.addAttribute("username", principal.getName());
                 return "request/create";
             }
             requestService.create(requestFormDTO);
         } catch (Exception e){
             flash.addFlashAttribute("errorMessage", "발주 등록 중 에러가 발생하였습니다.");
         }
+        model.addAttribute("username", principal.getName());
         return "redirect:/request/mylist";
     }
 

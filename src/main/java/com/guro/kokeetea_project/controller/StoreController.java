@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Optional;
 
 @Controller
@@ -24,7 +25,7 @@ public class StoreController {
     private final StoreService storeService;
 
     @GetMapping(value = {"/store/list","/store/list/{page}"})
-    public String listStore(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash){
+    public String listStore(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash, Principal principal){
         try {
             Pageable pageable = PageRequest.of(page.orElse(1)-1, 5);
             Page<StoreInfoDTO> storeList = storeService.list(pageable);
@@ -34,63 +35,71 @@ public class StoreController {
             model.addAttribute("page", pageable.getPageNumber()+1);
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "목록 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/";
         }
-
+        model.addAttribute("username", principal.getName());
         return "store/list";
     }
 
     @GetMapping(value = "/store/create")
-    public String createStore(Model model, RedirectAttributes flash){
+    public String createStore(Model model, RedirectAttributes flash, Principal principal){
         try {
             model.addAttribute("storeFormDTO", new StoreFormDTO());
             model.addAttribute("warehouses", storeService.warehouses());
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/store/list";
         }
-
+        model.addAttribute("username", principal.getName());
         return "store/create";
     }
 
     @PostMapping(value = "/store/create")
-    public String createStorePost(@Valid StoreFormDTO storeFormDTO, BindingResult bindingResult, Model model, RedirectAttributes flash){
+    public String createStorePost(@Valid StoreFormDTO storeFormDTO, BindingResult bindingResult, Model model, RedirectAttributes flash, Principal principal){
         try {
             if (bindingResult.hasErrors()){
                 model.addAttribute("warehouses", storeService.warehouses());
+                model.addAttribute("username", principal.getName());
                 return "store/create";
             }
             storeService.create(storeFormDTO);
         } catch (Exception e){
             flash.addFlashAttribute("errorMessage", "가맹점 등록 중 에러가 발생하였습니다.");
         }
+        model.addAttribute("username", principal.getName());
         return "redirect:/store/list";
     }
 
     @GetMapping(value = "/store/update/{id}")
-    public String updateStore(@PathVariable("id") Long id, Model model, RedirectAttributes flash){
+    public String updateStore(@PathVariable("id") Long id, Model model, RedirectAttributes flash, Principal principal){
         try {
             StoreFormDTO storeFormDTO = storeService.original(id);
             model.addAttribute("storeFormDTO", storeFormDTO);
             model.addAttribute("warehouses", storeService.warehouses());
+            model.addAttribute("username", principal.getName());
             return "store/create";
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/store/list";
         }
     }
 
     @PostMapping(value = "/store/update")
-    public String updateStorePost(@Valid StoreFormDTO storeFormDTO, BindingResult bindingResult, Model model, RedirectAttributes flash){
+    public String updateStorePost(@Valid StoreFormDTO storeFormDTO, BindingResult bindingResult, Model model, RedirectAttributes flash, Principal principal){
         try {
             if (bindingResult.hasErrors()){
                 model.addAttribute("warehouses", storeService.warehouses());
+                model.addAttribute("username", principal.getName());
                 return "store/create";
             }
             storeService.update(storeFormDTO);
         } catch (Exception e){
             flash.addFlashAttribute("errorMessage", "가맹점 수정 중 에러가 발생하였습니다.");
         }
+        model.addAttribute("username", principal.getName());
         return "redirect:/store/list";
     }
 
