@@ -118,24 +118,43 @@
             });
             return true;
         }
+
+        function refresh(id){
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var url = "/request/"+ id +"/refresh";
+
+            $.ajax({
+                url : url,
+                type : "POST",
+                contentType: "application/json",
+                dataType: "text",
+                beforeSend : function (xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                success: function (fragment, status, xhr) {
+                    $("#request-data").replaceWith(fragment);
+                }
+            });
+        }
     </script>
 </th:block>
 
 <div layout:fragment="content">
     <div class="card">
-        <div class="card-body">
+        <div class="card-body" id="request-data">
 
             <form role="form" method="get" th:object="${requests}">
                 <table class="table">
                     <thead>
                     <tr>
-                        <td>ID</td>
-                        <td>날짜</td>
-                        <td>재료</td>
-                        <td>수량</td>
-                        <td>가맹점</td>
-                        <td>창고</td>
-                        <td>상태</td>
+                        <td>ID<img th:src="@{/kokeetea/pngwing.com.png}" alt="" onclick="refresh('id')" width="10"></td>
+                        <td>날짜<img th:src="@{/kokeetea/pngwing.com.png}" alt="" onclick="refresh('date')" width="10"></td>
+                        <td>재료<img th:src="@{/kokeetea/pngwing.com.png}" alt="" onclick="refresh('ingredient')" width="10"></td>
+                        <td>수량<img th:src="@{/kokeetea/pngwing.com.png}" alt="" onclick="refresh('amount')" width="10"></td>
+                        <td>가맹점<img th:src="@{/kokeetea/pngwing.com.png}" alt="" width="10" onclick="refresh('store')"></td>
+                        <td>창고<img th:src="@{/kokeetea/pngwing.com.png}" alt="" width="10" onclick="refresh('warehouse')"></td>
+                        <td>상태<img th:src="@{/kokeetea/pngwing.com.png}" alt="" width="10" onclick="refresh('status')"></td>
                         <td></td>
                     </tr>
                     </thead>

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.guro.kokeetea_project.dto.WarehouseStockInfoDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.guro.kokeetea_project.dto.RequestFormDTO;
@@ -146,5 +148,22 @@ public class RequestController {
             return new ResponseEntity<>("발주 취소 중 에러가 발생하였습니다.", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(String.valueOf(id), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/request/{id}/refresh")
+    public String refreshRequest(Optional<Integer> page,@PathVariable("id") String id, Model model, Principal principal) throws Exception {
+        try {
+            Pageable pageable = PageRequest.of(page.orElse(1)-1, 10);
+            Page<RequestInfoDTO> requestList = requestService.refreshList(pageable, id);
+
+            model.addAttribute("requests", requestList);
+            model.addAttribute("page", pageable.getPageNumber()+1);
+            model.addAttribute("maxPage", 5);
+        } catch (Exception e) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+
+        }
+        model.addAttribute("username", principal.getName());
+        return "request/list :: #request-data";
     }
 }
