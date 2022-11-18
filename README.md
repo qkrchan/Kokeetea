@@ -1,92 +1,93 @@
-# kokeetea_WMS
+## UPDATE 0001 (2022-11-09 수 13:47)
 
+* README.md 새로 추가
+* 앞으로 여기에 작업 내역을 기록함
+* Footer 텍스트 수정 (src/main/resources/templates/fragments/footer.html)
+* Header 로고 수정 (src/main/resources/templates/fragments/header.html)
 
+## UPDATE 0002 (2022-11-09 수 15:59)
 
-## Getting started
+* 재료 등록 버튼 추가, 유효성 검사 기능
+* java 파일: controller/IngredientController.java, dto/IngredientFormDTO.java
+* html 파일: ingredient/create.html, ingredient/list.html)
+* 기타: 회원가입 버튼 위치 조정, css 파일에 유효성 불만족 클래스 추가
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## UPDATE 0003 (2022-11-09 수 22:38)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+* 재료 삭제 기능 추가 (숨김 처리, 완전 삭제 두 가지)
+* 재료, 가맹점, 창고 엔티티에 숨김 속성 (isValid) 추가
+* 재료, 가맹점, 창고 목록에 유효한 레코드만 표시
+* 에러 페이지 설정
+* 페이지별 권한 적절하게 설정
+* 기타: 잘못된 'OLD' 표시 제거, 메인 페이지 문구 수정 등
 
-## Add your files
+## UPDATE 0004 (2022-11-10 목 10:10)
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+* 재료 삭제 시 확인 메시지 추가
 
-```
-cd existing_repo
-git remote add origin http://117.16.137.205/lky7805/kokeetea_wms.git
-git branch -M main
-git push -uf origin main
-```
+## UPDATE 0005 (2022-11-10 목 16:33)
 
-## Integrate with your tools
+* 재료 수정 기능 추가
+* 재료 등록, 수정, 삭제 후 오류 처리 및 리디렉트 설정
+* 페이지 쪽수 오류 수정
 
-- [ ] [Set up project integrations](http://117.16.137.205/lky7805/kokeetea_wms/-/settings/integrations)
+## UPDATE 0006 (2022-11-11 금 10:26)
 
-## Collaborate with your team
+* 가맹점 삭제 오류 긴급 수정
+* 상단 메뉴 클래스 이름 오타 수정
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+## UPDATE 0007 (2022-11-12 토 11:58)
 
-## Test and Deploy
+* 테스트 데이터 생성 기능을 테스트 영역으로 분리 (KokeeteaAppTestRun.java)
+* /member/test 로 접속할 때 생성 (일반 애플리케이션에서는 접속 불가능)
 
-Use the built-in continuous integration in GitLab.
+## UPDATE 0008 (2022-11-12 토 17:53)
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+* 발주 등록 양식에 유효성 검사 추가
+* 가맹점, 창고에 대한 기본적인 등록, 조회, 수정, 삭제 기능 완성
+* 페이지 이동 버튼 오류 수정
 
-***
+## UPDATE 0009 (2022-11-13 일 15:45)
 
-# Editing this README
+* 창고 등록 시 재고 현황 데이터 추가
+* 재료 등록 시 재고 현황 데이터 추가
+* 가맹점의 배정 창고 속성 추가
+* 주문 상태 속성 추가
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+## UPDATE 0010 (2022-11-13 일 23:58)
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+* 가맹점주는 자신이 요청한 발주만 조회 가능
+* 발주 승인 기능 추가
+* 창고 재고 현황 페이지 추가
 
-## Name
-Choose a self-explaining name for your project.
+## UPDATE 0011 (2022-11-14 월 18:04)
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+* 분류 등록, 조회, 수정, 삭제 기능 구현
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## UPDATE 0012 (2022-11-14 월 18:46)
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+* 발주 승인 및 완료 기능 구현
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+## UPDATE 0013 (2022-11-15 화 10:17)
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+* 재고 갱신 기능 추가
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+## UPDATE 0014 (2022-11-15 화 14:26)
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+* 재고 현황 코드 정리
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+## UPDATE 0015 (2022-11-15 화 18:52)
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+* 메인 페이지 통계 시작
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+## UPDATE 0016 (2022-11-16 수 00:13)
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+* 메인 페이지 통계 진행
 
-## License
-For open source projects, say how it is licensed.
+## UPDATE 0017 (2022-11-16 수 11:07)
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+* 발주 취소, 반려 기능 구현
+
+## UPDATE 0018 (2022-11-16 수 23:22)
+
+* 템플릿 통합 시작

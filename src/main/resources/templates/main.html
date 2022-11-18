@@ -5,376 +5,418 @@
 
 
 <th:block layout:fragment="script">
-<script>
+    <script>
 
-    $(function(){
-        var coff_avg = 0;
-        var hongtea_avg = 0;
-        var greentea_avg = 0;
-        var milk_avg = 0;
-        var choco_avg = 0;
-        var sinamon_avg = 0;
-        var honey_avg = 0;
-        var orange_avg = 0;
-        var graf_avg = 0;
-        var banana_avg = 0;
+        $(function(){
+            var coff_avg = 0;
+            var hongtea_avg = 0;
+            var greentea_avg = 0;
+            var milk_avg = 0;
+            var choco_avg = 0;
+            var sinamon_avg = 0;
+            var honey_avg = 0;
+            var orange_avg = 0;
+            var graf_avg = 0;
+            var banana_avg = 0;
 
-        var coff_count = 0;
-        var hongtea_count= 0;
-        var greentea_avg = 0;
+            var coff_count = 0;
+            var hongtea_count= 0;
+            var greentea_avg = 0;
 
-        var month_count = 0;
-        var ten_mon = 0;
-        var nine_mon= 0;
-        var eight_mon=0;
-        var seven_mon=0;
-        var six_mon=0;
-        var five_mon=0;
+            var month_count = 0;
+            var ten_mon = 0;
+            var nine_mon= 0;
+            var eight_mon=0;
+            var seven_mon=0;
+            var six_mon=0;
+            var five_mon=0;
 
-        //재료 평균
-        $.ajax({
-            url: "ingredindAvg",
-            type: "GET",
-            dataType:"json",
-            cache   : false,
-            success: function(result,status){
-                coff_avg = result[0];
-                hongtea_avg = result[1];
-                greentea_avg = result[2];
-                milk_avg = result[3];
-                choco_avg = result[4];
-                sinamon_avg = result[5];
-                honey_avg = result[6];
-                orange_avg = result[7];
-                graf_avg = result[8];
-                banana_avg = result[9];
+            //재료 평균
+            $.ajax({
+                url: "ingredindAvg",
+                type: "GET",
+                dataType:"json",
+                cache   : false,
+                success: function(result,status){
+                    coff_avg = result[0];
+                    hongtea_avg = result[1];
+                    greentea_avg = result[2];
+                    milk_avg = result[3];
+                    choco_avg = result[4];
+                    sinamon_avg = result[5];
+                    honey_avg = result[6];
+                    orange_avg = result[7];
+                    graf_avg = result[8];
+                    banana_avg = result[9];
 
-                google.charts.load("current", {packages:["corechart"]});
-                google.charts.setOnLoadCallback(drawChart2);
-            },
-            error: function(jqXHR, status, error){
-                alert("주문이 실패하였습니다."+ jqXHR.responseText);
+                    google.charts.load("current", {packages:["corechart"]});
+                    google.charts.setOnLoadCallback(drawChart2);
+                },
+                error: function(jqXHR, status, error){
+                    alert("주문이 실패하였습니다."+ jqXHR.responseText);
+                }
+            });
+
+            //재료 건수
+            $.ajax({
+                url: "ingredindCount",
+                type: "GET",
+                dataType:"json",
+                cache   : false,
+                success: function(result,status){
+                    coff_count = result[0];
+                    hongtea_count= result[1];
+                    greentea_avg = result[2];
+
+                    $("#coff").html(coff_count+" 건")
+                    $("#hong").html(hongtea_count+" 건")
+                    $("#green").html(greentea_avg+" 건")
+                },
+                error: function(jqXHR, status, error){
+                    alert("주문이 실패하였습니다."+ jqXHR.responseText);
+                }
+            });
+
+            //월별 건수
+            $.ajax({
+                url: "monthCount",
+                type: "GET",
+                dataType:"json",
+                cache   : false,
+                success: function(result,status){
+                    nine_mon= parseFloat(result[1]);
+                    eight_mon=parseFloat(result[2]);
+                    seven_mon=parseFloat(result[3]);
+                    six_mon=parseFloat(result[4]);
+                    five_mon=parseFloat(result[5]);
+                    ten_mon = parseFloat(result[0]);
+                    $("#month_count").html(ten_mon)
+
+                    google.charts.load("current", {packages:["corechart"]});
+                    google.charts.setOnLoadCallback(drawChart1);
+                },
+                error: function(jqXHR, status, error){
+                    alert("주문이 실패하였습니다."+ jqXHR.responseText);
+                }
+            });
+
+            //store 건수
+            $.ajax({
+                url: "storeCount",
+                type: "GET",
+                dataType:"json",
+                cache   : false,
+                success: function(result,status){
+                    console.log(result);
+                },
+                error: function(jqXHR, status, error){
+                    alert("storeCount 주문이 실패하였습니다."+ jqXHR.responseText);
+                }
+            });
+
+
+
+            function drawChart1() {
+                var data = google.visualization.arrayToDataTable([
+                    ["Element", "Density", { role: "style" } ],
+                    ["10월", ten_mon, "#0047bd"],
+                    ["9월", nine_mon, "#64d13e"],
+                    ["8월", eight_mon, "#fadf00"],
+                    ["7월", seven_mon, "#4dc7fd"],
+                    ["6월", six_mon, "#5e53c7"],
+                    ["5월", 5419, "#fc007f"]
+                ]);
+
+                var view = new google.visualization.DataView(data);
+                view.setColumns([0, 1,
+                    { calc: "stringify",
+                        sourceColumn: 1,
+                        type: "string",
+                        role: "annotation" },
+                    2]);
+
+                var options = {
+                    title: "Density of Precious Metals",
+                    height: 350,
+                    bar: {groupWidth: "50%"},
+                    legend: { position: "none" },
+                };
+                var chart = new google.visualization.BarChart(document.getElementById("barchart_values11"));
+                chart.draw(view, options);
             }
+
+
+            function drawChart2() {
+                var data = google.visualization.arrayToDataTable([
+                    ['Task', 'Hours per Day'],
+                    ['커피',  coff_avg],
+                    ['홍차',  hongtea_avg],
+                    ['우유',  milk_avg],
+                    ['초콜릿', choco_avg],
+                    ['시나몬', sinamon_avg]
+                ]);
+
+                var options = {
+
+                    is3D: true,
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+                chart.draw(data, options);
+            }
+
+
+            google.charts.load('current', {'packages':['line']});
+            google.charts.setOnLoadCallback(drawChart3);
+
+            function drawChart3() {
+
+                var data = new google.visualization.DataTable();
+                data.addColumn('number', 'Day');
+                data.addColumn('number', '');
+                data.addColumn('number', '');
+                data.addColumn('number', '');
+
+                data.addRows([
+                    [1,  37.8, 80.8, 41.8],
+                    [2,  30.9, 69.5, 32.4],
+                    [3,  25.4,   57, 25.7],
+                    [4,  11.7, 18.8, 10.5],
+                    [5,  11.9, 17.6, 10.4],
+                    [6,   8.8, 13.6,  7.7],
+                    [7,   7.6, 12.3,  9.6],
+                    [8,  12.3, 29.2, 10.6],
+                    [9,  16.9, 42.9, 14.8],
+                    [10, 12.8, 30.9, 11.6],
+                    [11,  5.3,  7.9,  4.7],
+                    [12,  6.6,  8.4,  5.2],
+                    [13,  4.8,  6.3,  3.6],
+                    [14,  4.2,  6.2,  3.4]
+                ]);
+
+                var options = {
+                    chart: {
+                    },
+                    width: 1000,
+                    height: 450
+                };
+
+                var chart = new google.charts.Line(document.getElementById('linechart_material'));
+
+                chart.draw(data, google.charts.Line.convertOptions(options));
+            }
+
+
         });
 
-        //재료 건수
-        $.ajax({
-            url: "ingredindCount",
-            type: "GET",
-            dataType:"json",
-            cache   : false,
-            success: function(result,status){
-                coff_count = result[0];
-                hongtea_count= result[1];
-                greentea_avg = result[2];
-
-                $("#coff").html(coff_count+" 건")
-                $("#hong").html(hongtea_count+" 건")
-                $("#green").html(greentea_avg+" 건")
-            },
-            error: function(jqXHR, status, error){
-                alert("주문이 실패하였습니다."+ jqXHR.responseText);
-            }
-        });
-
-        //월별 건수
-        $.ajax({
-            url: "monthCount",
-            type: "GET",
-            dataType:"json",
-            cache   : false,
-            success: function(result,status){
-                nine_mon= parseFloat(result[1]);
-                eight_mon=parseFloat(result[2]);
-                seven_mon=parseFloat(result[3]);
-                six_mon=parseFloat(result[4]);
-                five_mon=parseFloat(result[5]);
-                ten_mon = parseFloat(result[0]);
-                $("#month_count").html(ten_mon)
-
-                google.charts.load("current", {packages:["corechart"]});
-                google.charts.setOnLoadCallback(drawChart1);
-            },
-            error: function(jqXHR, status, error){
-                alert("주문이 실패하였습니다."+ jqXHR.responseText);
-            }
-        });
-
-        //store 건수
-        $.ajax({
-            url: "storeCount",
-            type: "GET",
-            dataType:"json",
-            cache   : false,
-            success: function(result,status){
-                console.log(result);
-            },
-            error: function(jqXHR, status, error){
-                alert("storeCount 주문이 실패하였습니다."+ jqXHR.responseText);
-            }
-        });
-
-
-
-        function drawChart1() {
-            var data = google.visualization.arrayToDataTable([
-                ["Element", "Density", { role: "style" } ],
-                ["10월", ten_mon, "#0047bd"],
-                ["9월", nine_mon, "#64d13e"],
-                ["8월", eight_mon, "#fadf00"],
-                ["7월", seven_mon, "#4dc7fd"],
-                ["6월", six_mon, "#5e53c7"],
-                ["5월", 5419, "#fc007f"]
-            ]);
-
-            var view = new google.visualization.DataView(data);
-            view.setColumns([0, 1,
-                { calc: "stringify",
-                    sourceColumn: 1,
-                    type: "string",
-                    role: "annotation" },
-                2]);
-
-            var options = {
-                title: "Density of Precious Metals",
-                height: 350,
-                bar: {groupWidth: "50%"},
-                legend: { position: "none" },
-            };
-            var chart = new google.visualization.BarChart(document.getElementById("barchart_values11"));
-            chart.draw(view, options);
-        }
-
-
-        function drawChart2() {
-            var data = google.visualization.arrayToDataTable([
-                ['Task', 'Hours per Day'],
-                ['커피',  coff_avg],
-                ['홍차',  hongtea_avg],
-                ['우유',  milk_avg],
-                ['초콜릿', choco_avg],
-                ['시나몬', sinamon_avg]
-            ]);
-
-            var options = {
-
-                is3D: true,
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-            chart.draw(data, options);
-        }
-
-
-    });
 
 
 
 
-</script>
+    </script>
 </th:block>
 
 
 
 
-    <!-- ============================================================== -->
-    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Page wrapper  -->
-    <!-- ============================================================== -->
-    <div layout:fragment="content">
-                <!-- *************************************************************** -->
-                <!-- Start First Cards -->
-                <!-- *************************************************************** -->
-                <div class="card-group">
-                    <div class="card border-right">
-                        <div class="card-body">
-                            <div class="d-flex d-lg-flex d-md-block align-items-center">
-                                <div>
-                                    <div class="d-inline-flex align-items-center">
-                                        <h2 class="text-dark mb-1 font-weight-medium">10</h2><span style="margin-left:10px;">EA</span>
-                                    </div>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">총 가맹점 수</h6>
-                                </div>
-                                <div class="ml-auto mt-md-3 mt-lg-0">
-                                    <span class="opacity-7 text-muted"><i data-feather="user-plus"></i></span>
-                                </div>
-                            </div>
+<!-- ============================================================== -->
+<!-- End Left Sidebar - style you can find in sidebar.scss  -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Page wrapper  -->
+<!-- ============================================================== -->
+<div layout:fragment="content">
+    <!-- *************************************************************** -->
+    <!-- Start First Cards -->
+    <!-- *************************************************************** -->
+    <div class="card-group">
+        <div class="card border-right">
+            <div class="card-body">
+                <div class="d-flex d-lg-flex d-md-block align-items-center">
+                    <div>
+                        <div class="d-inline-flex align-items-center">
+                            <h2 class="text-dark mb-1 font-weight-medium">10</h2><span style="margin-left:10px;">EA</span>
                         </div>
+                        <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">총 가맹점 수</h6>
                     </div>
-                    <div class="card border-right">
-                        <div class="card-body">
-                            <div class="d-flex d-lg-flex d-md-block align-items-center">
-                                <div>
-                                    <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium" id="month_count">18,306</h2>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">마지막 월 총 발주 건수
-                                    </h6>
-                                </div>
-                                <div class="ml-auto mt-md-3 mt-lg-0">
-                                    <span class="opacity-7 text-muted"><i data-feather="user-plus"></i></span>
-                                    <!--                                <span class="opacity-7 text-muted"><i data-feather="dollar-sign"></i></span>-->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card border-right">
-                        <div class="card-body">
-                            <div class="d-flex d-lg-flex d-md-block align-items-center">
-                                <div>
-                                    <div class="d-inline-flex align-items-center">
-                                        <h2 class="text-dark mb-1 font-weight-medium">1538</h2>
-                                        <span
-                                                class="badge bg-danger font-12 text-white font-weight-medium badge-pill ml-2 d-md-none d-lg-block">-18.33%</span>
-                                    </div>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Projects</h6>
-                                </div>
-                                <div class="ml-auto mt-md-3 mt-lg-0">
-                                    <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex d-lg-flex d-md-block align-items-center">
-                                <div>
-                                    <h2 class="text-dark mb-1 font-weight-medium">864</h2>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Projects</h6>
-                                </div>
-                                <div class="ml-auto mt-md-3 mt-lg-0">
-                                    <span class="opacity-7 text-muted"><i data-feather="globe"></i></span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="ml-auto mt-md-3 mt-lg-0">
+                        <span class="opacity-7 text-muted"><i data-feather="user-plus"></i></span>
                     </div>
                 </div>
-                <!-- *************************************************************** -->
-                <!-- End First Cards -->
-                <!-- *************************************************************** -->
-                <!-- *************************************************************** -->
-                <!-- Start Sales Charts Section -->
-                <!-- *************************************************************** -->
-                <div class="row">
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">재료별 평균 발주량</h4>
-                                <!--                            <div id="campaign-v2" class="mt-2" style="height:283px; width:100%;"></div>-->
-                                <div id="piechart_3d" style="width:450px; height: 283px;"></div>
-                                <ul class="list-style-none mb-0">
-                                    <li>
-                                        <i class="fas fa-circle text-primary font-10 mr-2"></i>
-                                        <span class="text-muted">커피원두 총 주문건수</span>
-                                        <span class="text-dark float-right font-weight-medium" id="coff"></span>
-                                    </li>
-                                    <li class="mt-3">
-                                        <i class="fas fa-circle text-danger font-10 mr-2"></i>
-                                        <span class="text-muted">홍차잎 총 주문건수</span>
-                                        <span class="text-dark float-right font-weight-medium" id="hong"></span>
-                                    </li>
-                                    <li class="mt-3">
-                                        <i class="fas fa-circle text-cyan font-10 mr-2"></i>
-                                        <span class="text-muted">녹차잎 총 주문건수</span>
-                                        <span class="text-dark float-right font-weight-medium" id="green"></span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+            </div>
+        </div>
+        <div class="card border-right">
+            <div class="card-body">
+                <div class="d-flex d-lg-flex d-md-block align-items-center">
+                    <div>
+                        <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium" id="month_count">18,306</h2>
+                        <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">마지막 월 총 발주 건수
+                        </h6>
                     </div>
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">월별 발주량</h4>
-                                <!--                            <div class="net-income mt-4 position-relative" style="height:294px;"></div>-->
-                                <!--                            <div class="mt-4" id="barchart_material" style="width: 100%; height: 294px;"></div>-->
-                                <div class="mt-4" id="barchart_values11" style="width: 100%; height: 294px;"></div>
-                                <ul class="list-inline text-center mt-5 mb-2">
-                                    <li class="list-inline-item text-muted font-italic">Sales for this month</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title mb-4">발주서에서 지점별 매출현황 계산</h4>
-                                <div class="" style="height:180px">
-                                    <div id="visitbylocate" style="height:100%"></div>
-                                </div>
-                                <div class="row mb-3 align-items-center mt-1 mt-5">
-                                    <div class="col-4 text-right">
-                                        <span class="text-muted font-14">커피</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <!--                                    <div class="progress" style="height: 5px;">-->
-                                        <!--                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"-->
-                                        <!--                                             aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>-->
-                                        <!--                                    </div>-->
-                                        <div class="progress" style="height: 5px;width: 100px">
-                                            <!--                                            <div class="progress-bar bg-primary" role="progressbar" th:attr="style='width: ${coff_avg}%'"-->
-                                            <!--                                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>-->
-                                            <svg width="100" height="5">
-                                                <!--                                            <rect th:attr="width=${coff_avg}" height="5" style="fill:#1d35a6;"></rect>-->
-                                                <rect th:attr="width=80" height="5" style="fill:#1d35a6;"></rect>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="mb-0 font-12 text-dark font-weight-medium"><span th:text="${coff_avg}"></span>%</span>
-                                        <!--                                    <span class="mb-0 font-12 text-dark font-weight-medium">80%</span>-->
-                                    </div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-4 text-right">
-                                        <span class="text-muted font-14">UK</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 74%"
-                                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">21%</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-4 text-right">
-                                        <span class="text-muted font-14">USA</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-cyan" role="progressbar" style="width: 60%"
-                                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">18%</span>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center">
-                                    <div class="col-4 text-right">
-                                        <span class="text-muted font-14">China</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 50%"
-                                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">12%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="ml-auto mt-md-3 mt-lg-0">
+                        <span class="opacity-7 text-muted"><i data-feather="user-plus"></i></span>
+                        <!--                                <span class="opacity-7 text-muted"><i data-feather="dollar-sign"></i></span>-->
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="card border-right">
+            <div class="card-body">
+                <div class="d-flex d-lg-flex d-md-block align-items-center">
+                    <div>
+                        <div class="d-inline-flex align-items-center">
+                            <h2 class="text-dark mb-1 font-weight-medium">1538</h2>
+                            <span
+                                    class="badge bg-danger font-12 text-white font-weight-medium badge-pill ml-2 d-md-none d-lg-block">-18.33%</span>
+                        </div>
+                        <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Projects</h6>
+                    </div>
+                    <div class="ml-auto mt-md-3 mt-lg-0">
+                        <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex d-lg-flex d-md-block align-items-center">
+                    <div>
+                        <h2 class="text-dark mb-1 font-weight-medium">864</h2>
+                        <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Projects</h6>
+                    </div>
+                    <div class="ml-auto mt-md-3 mt-lg-0">
+                        <span class="opacity-7 text-muted"><i data-feather="globe"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <!-- *************************************************************** -->
+    <!-- End First Cards -->
+    <!-- *************************************************************** -->
+    <!-- *************************************************************** -->
+    <!-- Start Sales Charts Section -->
+    <!-- *************************************************************** -->
+    <div class="row">
+        <div class="col-lg-4 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">재료별 평균 발주량</h4>
+                    <!--                            <div id="campaign-v2" class="mt-2" style="height:283px; width:100%;"></div>-->
+                    <div id="piechart_3d" style="width:450px; height: 283px;"></div>
+                    <ul class="list-style-none mb-0">
+                        <li>
+                            <i class="fas fa-circle text-primary font-10 mr-2"></i>
+                            <span class="text-muted">커피원두 총 주문건수</span>
+                            <span class="text-dark float-right font-weight-medium" id="coff"></span>
+                        </li>
+                        <li class="mt-3">
+                            <i class="fas fa-circle text-danger font-10 mr-2"></i>
+                            <span class="text-muted">홍차잎 총 주문건수</span>
+                            <span class="text-dark float-right font-weight-medium" id="hong"></span>
+                        </li>
+                        <li class="mt-3">
+                            <i class="fas fa-circle text-cyan font-10 mr-2"></i>
+                            <span class="text-muted">녹차잎 총 주문건수</span>
+                            <span class="text-dark float-right font-weight-medium" id="green"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12">
+            <div class="card" data-toggle="modal" data-target="#myModal">
+                <div class="card-body">
+                    <h4 class="card-title">월별 발주량</h4>
+                    <!--                            <div class="net-income mt-4 position-relative" style="height:294px;"></div>-->
+                    <!--                            <div class="mt-4" id="barchart_material" style="width: 100%; height: 294px;"></div>-->
+                    <div class="mt-4" id="barchart_values11" style="width: 100%; height: 294px;"></div>
+                    <ul class="list-inline text-center mt-5 mb-2">
+                        <li class="list-inline-item text-muted font-italic">Sales for this month</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">발주서에서 지점별 매출현황 계산</h4>
+                    <div class="" style="height:180px">
+                        <div id="visitbylocate" style="height:100%"></div>
+                    </div>
+                    <div class="row mb-3 align-items-center mt-1 mt-5">
+                        <div class="col-4 text-right">
+                            <span class="text-muted font-14">커피</span>
+                        </div>
+                        <div class="col-5">
+                            <!--                                    <div class="progress" style="height: 5px;">-->
+                            <!--                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"-->
+                            <!--                                             aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>-->
+                            <!--                                    </div>-->
+                            <div class="progress" style="height: 5px;width: 100px">
+                                <!--                                            <div class="progress-bar bg-primary" role="progressbar" th:attr="style='width: ${coff_avg}%'"-->
+                                <!--                                                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>-->
+                                <svg width="100" height="5">
+                                    <!--                                            <rect th:attr="width=${coff_avg}" height="5" style="fill:#1d35a6;"></rect>-->
+                                    <rect th:attr="width=80" height="5" style="fill:#1d35a6;"></rect>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="mb-0 font-12 text-dark font-weight-medium"><span th:text="${coff_avg}"></span>%</span>
+                            <!--                                    <span class="mb-0 font-12 text-dark font-weight-medium">80%</span>-->
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-4 text-right">
+                            <span class="text-muted font-14">UK</span>
+                        </div>
+                        <div class="col-5">
+                            <div class="progress" style="height: 5px;">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 74%"
+                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="mb-0 font-14 text-dark font-weight-medium">21%</span>
+                        </div>
+                    </div>
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-4 text-right">
+                            <span class="text-muted font-14">USA</span>
+                        </div>
+                        <div class="col-5">
+                            <div class="progress" style="height: 5px;">
+                                <div class="progress-bar bg-cyan" role="progressbar" style="width: 60%"
+                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="mb-0 font-14 text-dark font-weight-medium">18%</span>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-4 text-right">
+                            <span class="text-muted font-14">China</span>
+                        </div>
+                        <div class="col-5">
+                            <div class="progress" style="height: 5px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 50%"
+                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="mb-0 font-14 text-dark font-weight-medium">12%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- ============================================================== -->
-    <!-- End Page wrapper  -->
-    <!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- End Page wrapper  -->
+<!-- ============================================================== -->
 
 </html>

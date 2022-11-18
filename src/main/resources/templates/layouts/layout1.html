@@ -68,6 +68,25 @@
 
 
             <div th:replace="fragments/footer::footer"></div>
+
+
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <span class="modal-title" id="myModalLabel" style="font-size:12px; margin-top:3px;">월별 발주량 선 차트</span>
+                        </div>
+                        <div class="modal-body">
+                            <span class="modal-title" style="font-size:12px; margin-top:3px; display:inline-block; margin-bottom:20px;">월별 발주량 선 차트</span>
+                            <div id="linechart_material" style="width: 1000px; height: 450px;"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->

@@ -4,48 +4,52 @@
       layout:decorate="~{layouts/layout1}">
 
 <div layout:fragment="content">
+    <div class="card">
+        <div class="card-body">
 
-    <form role="form" method="post" th:object="${requestFormDTO}">
+            <form role="form" method="post" th:object="${requestFormDTO}">
 
-        <p class="h2">
-            발주하기
-        </p>
+                <p class="h2">
+                    발주하기
+                </p>
 
-        <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:field="*{id}">
 
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">재료</span>
-            </div>
-            <select th:field="*{ingredientId}" class="form-control">
-                <option th:value="${ingredient.id}" th:text="${ingredient.name}" th:each="ingredient : ${ingredients}"></option>
-            </select>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">재료</span>
+                    </div>
+                    <select th:field="*{ingredientId}" class="form-control">
+                        <option th:value="${ingredient.id}" th:text="${ingredient.name}" th:each="ingredient : ${ingredients}"></option>
+                    </select>
+                </div>
+                <p th:if="${#fields.hasErrors('ingredientId')}" th:errors="*{ingredientId}" class="fieldError">Incorrect data</p>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">가맹점</span>
+                    </div>
+                    <select th:field="*{storeId}" class="form-control">
+                        <option th:value="${store.id}" th:text="${store.name}" th:each="store : ${stores}"></option>
+                    </select>
+                </div>
+                <p th:if="${#fields.hasErrors('storeId')}" th:errors="*{storeId}" class="fieldError">Incorrect data</p>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">수량</span>
+                    </div>
+                    <input type="number" th:field="*{amount}" class="form-control" placeholder="발주할 수량을 입력하세요">
+                </div>
+                <p th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="fieldError">Incorrect data</p>
+
+                <button th:formaction="@{/request/create}" type="submit" class="btn btn-primary">등록</button>
+                <button th:onclick="location.href='/request/list'" type="button" class="btn btn-primary">취소</button>
+
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            </form>
         </div>
-        <p th:if="${#fields.hasErrors('ingredientId')}" th:errors="*{ingredientId}" class="fieldError">Incorrect data</p>
-
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">가맹점</span>
-            </div>
-            <select th:field="*{storeId}" class="form-control">
-                <option th:value="${store.id}" th:text="${store.name}" th:each="store : ${stores}"></option>
-            </select>
-        </div>
-        <p th:if="${#fields.hasErrors('storeId')}" th:errors="*{storeId}" class="fieldError">Incorrect data</p>
-        
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">수량</span>
-            </div>
-            <input type="number" th:field="*{amount}" class="form-control" placeholder="발주할 수량을 입력하세요">
-        </div>
-        <p th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="fieldError">Incorrect data</p>
-
-        <button th:formaction="@{/request/create}" type="submit" class="btn btn-primary">등록</button>
-        <button th:onclick="location.href='/request/list'" type="button" class="btn btn-primary">취소</button>
-
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-    </form>
+    </div>
 
 </div>
 
