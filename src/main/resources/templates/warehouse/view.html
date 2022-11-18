@@ -117,27 +117,36 @@
 </th:block>
 
 <div layout:fragment="content">
-  <canvas id="chart2"></canvas>
-  <form role="form" method="get">
-    <div id="warehouse-data">
-      <table class="table">
-        <thead>
-          <tr>
-            <td colspan="3">
-              <h4 class="text-center" th:text="${warehouse.id} + '  ' + ${warehouse.name}" th:onclick="refresh()"></h4>
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="stock : ${warehouse.currentStockInfoDTOList}">
-            <td th:text="${stock.name}"></td>
-            <td th:text="${stock.amount}"></td>
-            <td><input type="button" class="btn btn-primary" value="갱신" th:onclick="location.href='/warehouse/currentstock/'+[[${stock.id}]]"></td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="card">
+    <div class="card-body">
+      <canvas id="chart2"></canvas>
+      <form role="form" method="get">
+        <div id="warehouse-data">
+          <table class="table">
+            <thead>
+            <tr>
+              <td colspan="3">
+                <h4 class="text-center" th:text="${warehouse.id} + '  ' + ${warehouse.name}" th:onclick="refresh()"></h4>
+              </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>재 료 명</td>
+              <td>재 료 량</td>
+              <td></td>
+            </tr>
+            <tr th:each="stock : ${warehouse.currentStockInfoDTOList}">
+              <td th:text="${stock.name}"></td>
+              <td th:text="${stock.amount}"></td>
+              <td><input type="button" class="btn btn-primary" value="갱신" th:onclick="location.href='/warehouse/currentstock/'+[[${stock.id}]]"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 </div>
 
 </html>

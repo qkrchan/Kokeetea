@@ -86,60 +86,64 @@
 </th:block>
 
 <div layout:fragment="content">
+    <div class="card">
+        <div class="card-body">
 
-    <form role="form" method="get" th:object="${requests}">
-        <table class="table">
-            <thead>
-            <tr>
-                <td>ID</td>
-                <td>날짜</td>
-                <td>재료</td>
-                <td>수량</td>
-                <td>창고</td>
-                <td>상태</td>
-                <td></td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="request, status: ${requests.getContent()}">
-                <td th:text="${request.id}"></td>
-                <td>
-                    <a th:href="'/request/'+${request.id}" th:text="${request.date}"></a>
-                </td>
-                <td th:text="${request.ingredientName}"></td>
-                <td th:text="${request.amount}"></td>
-                <td th:text="${request.warehouseName}"></td>
-                <td th:text="${request.status}"></td>
-                <td>
-                    <input th:if="${request.canComplete}" type="button" class="btn btn-primary" value="완료" th:onclick="completeRequest([[${request}]])">
-                    <input th:if="${request.canCancel}" type="button" class="btn btn-primary" value="취소" th:onclick="cancelRequest([[${request}]])">
-                </td>
-            </tr>
-            </tbody>
-        </table>
+            <form role="form" method="get" th:object="${requests}">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>날짜</td>
+                        <td>재료</td>
+                        <td>수량</td>
+                        <td>창고</td>
+                        <td>상태</td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="request, status: ${requests.getContent()}">
+                        <td th:text="${request.id}"></td>
+                        <td>
+                            <a th:href="'/request/'+${request.id}" th:text="${request.date}"></a>
+                        </td>
+                        <td th:text="${request.ingredientName}"></td>
+                        <td th:text="${request.amount}"></td>
+                        <td th:text="${request.warehouseName}"></td>
+                        <td th:text="${request.status}"></td>
+                        <td>
+                            <input th:if="${request.canComplete}" type="button" class="btn btn-primary" value="완료" th:onclick="completeRequest([[${request}]])">
+                            <input th:if="${request.canCancel}" type="button" class="btn btn-primary" value="취소" th:onclick="cancelRequest([[${request}]])">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
 
-        <div th:with="start=${(requests.number/maxPage)*maxPage + 1}, end=(${(requests.totalPages == 0) ? 1 : (start + (maxPage - 1) < requests.totalPages ? start + (maxPage - 1) : requests.totalPages)})" >
-            <ul class="pagination justify-content-center">
+                <div th:with="start=${(requests.number/maxPage)*maxPage + 1}, end=(${(requests.totalPages == 0) ? 1 : (start + (maxPage - 1) < requests.totalPages ? start + (maxPage - 1) : requests.totalPages)})" >
+                    <ul class="pagination justify-content-center">
 
-                <li class="page-item" th:classappend="${requests.first}?'disabled'">
-                    <a th:href="'/request/mylist/' + ${requests.number}" aria-label='Previous' class="page-link">
-                        <span aria-hidden='true'>Previous</span>
-                    </a>
-                </li>
+                        <li class="page-item" th:classappend="${requests.first}?'disabled'">
+                            <a th:href="'/request/mylist/' + ${requests.number}" aria-label='Previous' class="page-link">
+                                <span aria-hidden='true'>Previous</span>
+                            </a>
+                        </li>
 
-                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${requests.number eq page-1}?'active':''">
-                    <a th:href="'/request/mylist/' + ${page}" th:inline="text" class="page-link">[[${page}]]</a>
-                </li>
+                        <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${requests.number eq page-1}?'active':''">
+                            <a th:href="'/request/mylist/' + ${page}" th:inline="text" class="page-link">[[${page}]]</a>
+                        </li>
 
-                <li class="page-item" th:classappend="${requests.last}?'disabled'">
-                    <a th:href="'/request/mylist/' + ${requests.number+2}" aria-label='Next' class="page-link">
-                        <span aria-hidden='true'>Next</span>
-                    </a>
-                </li>
+                        <li class="page-item" th:classappend="${requests.last}?'disabled'">
+                            <a th:href="'/request/mylist/' + ${requests.number+2}" aria-label='Next' class="page-link">
+                                <span aria-hidden='true'>Next</span>
+                            </a>
+                        </li>
 
-            </ul>
+                    </ul>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 
 </div>
 

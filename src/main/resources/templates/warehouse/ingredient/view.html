@@ -32,23 +32,27 @@
 </th:block>
 
 <div layout:fragment="content">
-    <div id="warehouse-data">
-        <table class="table">
-            <thead>
-            <tr>
-                <td colspan="3">
-                    <h4 class="text-center" th:text="${ingredient.id} + '  ' + ${ingredient.name}" th:onclick="refresh()"></h4>
-                </td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="stock : ${ingredient.currentStockInfoDTOList}">
-                <td th:text="${stock.name}"></td>
-                <td th:text="${stock.amount}"></td>
-                <td><input type="button" class="btn btn-primary" value="갱신" th:onclick="location.href='/warehouse/currentstock/'+[[${stock.id}]]+'/ingredient'"></td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="card">
+        <div class="card-body">
+            <div id="warehouse-data">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td colspan="3">
+                            <h4 class="text-center" th:text="${ingredient.id} + '  ' + ${ingredient.name}" th:onclick="refresh()"></h4>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="stock : ${ingredient.currentStockInfoDTOList}">
+                        <td th:text="${stock.name}"></td>
+                        <td th:text="${stock.amount}"></td>
+                        <td><input type="button" class="btn btn-primary" value="갱신" th:onclick="location.href='/warehouse/currentstock/'+[[${stock.id}]]+'/ingredient'"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
