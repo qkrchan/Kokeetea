@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.guro.kokeetea_project.dto.WarehouseStockInfoDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.guro.kokeetea_project.dto.RequestFormDTO;
@@ -31,7 +33,7 @@ public class RequestController {
     private final RequestService requestService;
 
     @GetMapping(value = {"/request/list","/request/list/{page}"})
-    public String listRequest(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash){
+    public String listRequest(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash, Principal principal){
         try {
             Pageable pageable = PageRequest.of(page.orElse(1)-1, 10);
             Page<RequestInfoDTO> requestList = requestService.list(pageable);
@@ -41,9 +43,10 @@ public class RequestController {
             model.addAttribute("maxPage", 5);
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "목록 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/";
         }
-        
+        model.addAttribute("username", principal.getName());
         return "request/list";
     }
 
@@ -58,38 +61,42 @@ public class RequestController {
             model.addAttribute("maxPage", 5);
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "목록 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/";
         }
-        
+        model.addAttribute("username", principal.getName());
         return "request/mylist";
     }
 
     @GetMapping(value = "/request/create")
-    public String createRequest(Model model, RedirectAttributes flash){
+    public String createRequest(Model model, RedirectAttributes flash, Principal principal){
         try {
             model.addAttribute("requestFormDTO", new RequestFormDTO());
             model.addAttribute("ingredients", requestService.ingredients());
             model.addAttribute("stores", requestService.stores());
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/request/mylist";
         }
-        
+        model.addAttribute("username", principal.getName());
         return "request/create";
     }
 
     @PostMapping(value = "/request/create")
-    public String createRequestPost(@Valid RequestFormDTO requestFormDTO, BindingResult bindingResult, Model model, RedirectAttributes flash){
+    public String createRequestPost(@Valid RequestFormDTO requestFormDTO, BindingResult bindingResult, Model model, RedirectAttributes flash, Principal principal){
         try {
             if (bindingResult.hasErrors()){
                 model.addAttribute("ingredients", requestService.ingredients());
                 model.addAttribute("stores", requestService.stores());
+                model.addAttribute("username", principal.getName());
                 return "request/create";
             }
             requestService.create(requestFormDTO);
         } catch (Exception e){
             flash.addFlashAttribute("errorMessage", "발주 등록 중 에러가 발생하였습니다.");
         }
+        model.addAttribute("username", principal.getName());
         return "redirect:/request/mylist";
     }
 
@@ -141,5 +148,22 @@ public class RequestController {
             return new ResponseEntity<>("발주 취소 중 에러가 발생하였습니다.", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(String.valueOf(id), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/request/{id}/refresh")
+    public String refreshRequest(Optional<Integer> page,@PathVariable("id") String id, Model model, Principal principal) throws Exception {
+        try {
+            Pageable pageable = PageRequest.of(page.orElse(1)-1, 10);
+            Page<RequestInfoDTO> requestList = requestService.refreshList(pageable, id);
+
+            model.addAttribute("requests", requestList);
+            model.addAttribute("page", pageable.getPageNumber()+1);
+            model.addAttribute("maxPage", 5);
+        } catch (Exception e) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+
+        }
+        model.addAttribute("username", principal.getName());
+        return "request/list :: #request-data";
     }
 }

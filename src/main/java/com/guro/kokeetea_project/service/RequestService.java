@@ -92,6 +92,57 @@ public class RequestService {
     }
 
     @Transactional(readOnly = true)
+    public Page<RequestInfoDTO> refreshList(Pageable pageable, String id) throws Exception {
+
+        List<Request> requests = new ArrayList<>();
+
+        switch (id){
+            case "id": requests = requestRepository.listRequestId(pageable); break;
+            case "date": requests = requestRepository.listRequest(pageable); break;
+            case "ingredient": requests = requestRepository.listRequestIngredient(pageable); break;
+            case "amount": requests = requestRepository.listRequestAmount(pageable); break;
+            case "store": requests = requestRepository.listRequestStore(pageable); break;
+            case "warehouse": requests = requestRepository.listRequestWarehouse(pageable); break;
+            case "status": requests = requestRepository.listRequestStatus(pageable); break;
+            default: requests = requestRepository.listRequest(pageable);
+        }
+        Long totalCount = requestRepository.countRequest();
+        List<RequestInfoDTO> list = new ArrayList<>();
+
+        for (Request request : requests){
+            RequestInfoDTO dto = new RequestInfoDTO();
+            try {
+                dto.setId(request.getId());
+                dto.setIngredientName(request.getIngredient()!=null?request.getIngredient().getName():null);
+                dto.setAmount(request.getAmount());
+                dto.setStoreName(request.getStore()!=null?request.getStore().getName():null);
+                dto.setDate(request.getDate()!=null?request.getDate().format(DateTimeFormatter.ofPattern("yyyy년 M월 d일 a h시 m분").withLocale(Locale.forLanguageTag("ko"))):null);
+                dto.setWarehouseName(request.getWarehouse()!=null?request.getWarehouse().getName():"미배정");
+                if (dto.getIngredientName()==null || dto.getAmount()==null || dto.getStoreName()==null || dto.getDate()==null || dto.getWarehouseName()==null) {
+                    throw new Exception();
+                }
+                switch (request.getStatus()) {
+                    case PENDING : dto.setStatus("대기"); dto.setCanConfirm(true); dto.setCanReject(true); break;
+                    case INPROGRESS : dto.setStatus("배송중"); dto.setCanCancel(true); break;
+                    case COMPLETE : dto.setStatus("완료"); break;
+                    case REJECTED : dto.setStatus("반려"); break;
+                    case CANCELLED : dto.setStatus("취소"); break;
+                    case NEEDACTION : dto.setStatus("확인필요"); break;
+                    case ERROR : throw new Exception();
+                    default : throw new Exception();
+                }
+            } catch (Exception e) {
+                dto.setStatus("에러");
+            }
+            if (!dto.getStatus().equals("에러")) {
+                list.add(dto);
+            }
+        }
+
+        return new PageImpl<>(list, pageable, totalCount);
+    }
+
+    @Transactional(readOnly = true)
     public Page<RequestInfoDTO> mylist(Pageable pageable, String email) throws Exception {
         List<Request> requests = requestRepository.mylistRequest(email, pageable);
         Long totalCount = requestRepository.mycountRequest(email);

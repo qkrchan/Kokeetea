@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Optional;
 
 @Controller
@@ -24,7 +25,7 @@ public class IngredientController {
     private final IngredientService ingredientService;
 
     @GetMapping(value = {"/ingredient/list","/ingredient/list/{page}"})
-    public String listIngredient(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash){
+    public String listIngredient(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash, Principal principal){
         try {
             Pageable pageable = PageRequest.of(page.orElse(1)-1, 5);
             Page<IngredientInfoDTO> ingredientList = ingredientService.list(pageable);
@@ -34,61 +35,71 @@ public class IngredientController {
             model.addAttribute("maxPage", 5);
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "목록 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/";
         }
+        model.addAttribute("username", principal.getName());
         return "ingredient/list";
     }
 
     @GetMapping(value = "/ingredient/create")
-    public String createIngredient(Model model, RedirectAttributes flash){
+    public String createIngredient(Model model, RedirectAttributes flash, Principal principal){
         try {
             model.addAttribute("ingredientFormDTO", new IngredientFormDTO());
             model.addAttribute("categories", ingredientService.categories());
+            model.addAttribute("username", principal.getName());
             return "ingredient/create";
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/ingredient/list";
         }
     }
 
     @PostMapping(value = "/ingredient/create")
-    public String createIngredientPost(@Valid IngredientFormDTO ingredientFormDTO, BindingResult bindingResult, Model model, RedirectAttributes flash){
+    public String createIngredientPost(@Valid IngredientFormDTO ingredientFormDTO, BindingResult bindingResult, Model model, RedirectAttributes flash, Principal principal){
         try {
             if (bindingResult.hasErrors()){
                 model.addAttribute("categories", ingredientService.categories());
+                model.addAttribute("username", principal.getName());
                 return "ingredient/create";
             }
             ingredientService.create(ingredientFormDTO);
         } catch (Exception e){
             flash.addFlashAttribute("errorMessage", "재료 등록 중 에러가 발생하였습니다.");
         }
+        model.addAttribute("username", principal.getName());
         return "redirect:/ingredient/list";
     }
 
     @GetMapping(value = "/ingredient/update/{id}")
-    public String updateIngredient(@PathVariable("id") Long id, Model model, RedirectAttributes flash){
+    public String updateIngredient(@PathVariable("id") Long id, Model model, RedirectAttributes flash, Principal principal){
         try {
             IngredientFormDTO ingredientFormDTO = ingredientService.original(id);
             model.addAttribute("ingredientFormDTO", ingredientFormDTO);
             model.addAttribute("categories", ingredientService.categories());
+            model.addAttribute("username", principal.getName());
             return "ingredient/create";
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/ingredient/list";
         }
     }
 
     @PostMapping(value = "/ingredient/update")
-    public String updateIngredientPost(@Valid IngredientFormDTO ingredientFormDTO, BindingResult bindingResult, Model model, RedirectAttributes flash){
+    public String updateIngredientPost(@Valid IngredientFormDTO ingredientFormDTO, BindingResult bindingResult, Model model, RedirectAttributes flash, Principal principal){
         try {
             if (bindingResult.hasErrors()){
                 model.addAttribute("categories", ingredientService.categories());
+                model.addAttribute("username", principal.getName());
                 return "ingredient/create";
             }
             ingredientService.update(ingredientFormDTO);
         } catch (Exception e){
             flash.addFlashAttribute("errorMessage", "재료 수정 중 에러가 발생하였습니다.");
         }
+        model.addAttribute("username", principal.getName());
         return "redirect:/ingredient/list";
     }
 

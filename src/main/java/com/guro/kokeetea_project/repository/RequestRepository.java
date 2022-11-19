@@ -21,6 +21,24 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     @Query("select r from Request r order by r.date desc")
     List<Request> listRequest(Pageable pageable);
 
+    @Query("select r from Request r order by r.id desc")
+    List<Request> listRequestId(Pageable pageable);
+
+    @Query("select r from Request r order by r.ingredient desc")
+    List<Request> listRequestIngredient(Pageable pageable);
+
+    @Query("select r from Request r order by r.amount desc")
+    List<Request> listRequestAmount(Pageable pageable);
+
+    @Query("select r from Request r order by r.store desc")
+    List<Request> listRequestStore(Pageable pageable);
+
+    @Query("select r from Request r order by r.warehouse desc")
+    List<Request> listRequestWarehouse(Pageable pageable);
+
+    @Query("select r from Request r order by r.status desc")
+    List<Request> listRequestStatus(Pageable pageable);
+
     @Query("select r from Request r where r.store.email = :email order by r.date desc")
     List<Request> mylistRequest(@Param("email") String email, Pageable pageable);
 

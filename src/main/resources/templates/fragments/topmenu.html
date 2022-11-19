@@ -181,10 +181,10 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
-                            <img th:src="@{/opensource/assets/images/users/profile-pic.jpg}" alt="user" class="rounded-circle"
+                            <img th:src="@{/kokeetea/10a1c1_8ffd13b852984505b973e4aa4def5af9_mv2.png}" alt="user" class="rounded-circle"
                                  width="40">
-                            <span class="ml-2 d-none d-lg-inline-block"><span>Hello,</span> <span
-                                    class="text-dark">Jason Doe</span> <i data-feather="chevron-down"
+                            <span class="ml-2 d-none d-lg-inline-block"><span th:if="${username}"
+                                    th:text="${username}">Jason Doe</span> <i data-feather="chevron-down"
                                                                           class="svg-icon"></i></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">

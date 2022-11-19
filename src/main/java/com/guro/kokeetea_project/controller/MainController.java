@@ -33,7 +33,7 @@ public class MainController {
             return "redirect:/member/login";
         }
         try {
-            model.addAttribute("stat", requestService.stat());
+
         } catch (Exception e) {
             model.addAttribute("stat", new StatisticsDTO());
         }

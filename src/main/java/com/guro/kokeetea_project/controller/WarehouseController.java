@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class WarehouseController {
     private final WarehouseService warehouseService;
 
     @GetMapping(value = {"/warehouse/list","/warehouse/list/{page}"})
-    public String listWarehouse(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash, SearchDTO searchDTO){
+    public String listWarehouse(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash, SearchDTO searchDTO, Principal principal){
         try {
             Pageable pageable = PageRequest.of(page.orElse(1)-1, 5);
             Page<WarehouseInfoDTO> warehouseList = warehouseService.list(pageable);
@@ -43,52 +44,61 @@ public class WarehouseController {
             model.addAttribute("page", pageable.getPageNumber()+1);
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "목록 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/";
         }
+        model.addAttribute("username", principal.getName());
         return "warehouse/list";
     }
 
     @GetMapping(value = "/warehouse/create")
-    public String createWarehouse(Model model){
+    public String createWarehouse(Model model, Principal principal){
         model.addAttribute("warehouseFormDTO", new WarehouseFormDTO());
+        model.addAttribute("username", principal.getName());
         return "warehouse/create";
     }
 
     @PostMapping(value = "/warehouse/create")
-    public String createWarehousePost(@Valid WarehouseFormDTO warehouseFormDTO, BindingResult bindingResult, Model model){
+    public String createWarehousePost(@Valid WarehouseFormDTO warehouseFormDTO, BindingResult bindingResult, Model model, Principal principal){
         try {
             if (bindingResult.hasErrors()){
+                model.addAttribute("username", principal.getName());
                 return "warehouse/create";
             }
             warehouseService.create(warehouseFormDTO);
         } catch (Exception e){
             model.addAttribute("errorMessage", "창고 등록 중 에러가 발생하였습니다.");
         }
+        model.addAttribute("username", principal.getName());
         return "redirect:/warehouse/list";
     }
 
     @GetMapping(value = "/warehouse/update/{id}")
-    public String updateWarehouse(@PathVariable("id") Long id, Model model, RedirectAttributes flash){
+    public String updateWarehouse(@PathVariable("id") Long id, Model model, RedirectAttributes flash, Principal principal){
         try {
             WarehouseFormDTO warehouseFormDTO = warehouseService.original(id);
             model.addAttribute("warehouseFormDTO", warehouseFormDTO);
+            model.addAttribute("username", principal.getName());
             return "warehouse/create";
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/warehouse/list";
         }
     }
 
     @PostMapping(value = "/warehouse/update")
-    public String updateWarehousePost(@Valid WarehouseFormDTO warehouseFormDTO, BindingResult bindingResult, RedirectAttributes flash){
+    public String updateWarehousePost(@Valid WarehouseFormDTO warehouseFormDTO, BindingResult bindingResult, RedirectAttributes flash, Principal principal, Model model){
         try {
             if (bindingResult.hasErrors()){
+                model.addAttribute("username", principal.getName());
                 return "warehouse/create";
             }
             warehouseService.update(warehouseFormDTO);
         } catch (Exception e){
             flash.addFlashAttribute("errorMessage", "창고 수정 중 에러가 발생하였습니다.");
         }
+        model.addAttribute("username", principal.getName());
         return "redirect:/warehouse/list";
     }
 
@@ -113,59 +123,64 @@ public class WarehouseController {
     }
 
     @GetMapping(value = "/warehouse/{id}")
-    public String viewWarehouse(@PathVariable("id") Long id, Model model, RedirectAttributes flash) throws Exception {
+    public String viewWarehouse(@PathVariable("id") Long id, Model model, RedirectAttributes flash, Principal principal) throws Exception {
         try {
             WarehouseStockInfoDTO warehouseStockInfoDTO = warehouseService.status(id);
             Map<String, Long> itemsSum = warehouseService.chartWarehouse(warehouseStockInfoDTO);
             model.addAttribute("warehouse", warehouseStockInfoDTO);
             model.addAttribute("data", itemsSum);
+            model.addAttribute("username", principal.getName());
             return "warehouse/view";
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "창고 조회 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "warehouse/list";
         }
     }
 
     @GetMapping(value = "/warehouse/ingredient/{id}")
-    public String viewWarehouseByIngredient(@PathVariable("id") Long id, Model model) throws Exception {
+    public String viewWarehouseByIngredient(@PathVariable("id") Long id, Model model, Principal principal) throws Exception {
         try {
             IngredientStockInfoDTO ingredientStockInfoDTO = warehouseService.status2(id);
             model.addAttribute("ingredient", ingredientStockInfoDTO);
         } catch (Exception e) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
         }
-
+        model.addAttribute("username", principal.getName());
         return "warehouse/ingredient/view";
     }
 
     @PostMapping(value = "/warehouse/{id}/refresh")
-    public String refreshWarehouse(@PathVariable("id") Long id, Model model) throws Exception {
+    public String refreshWarehouse(@PathVariable("id") Long id, Model model, Principal principal) throws Exception {
         try {
             WarehouseStockInfoDTO warehouseList = warehouseService.status(id);
             model.addAttribute("warehouse", warehouseList);
         } catch (Exception e) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
         }
-        
+        model.addAttribute("username", principal.getName());
         return "warehouse/view :: #warehouse-data";
     }
 
     @GetMapping(value = {"/warehouse/currentstock/{id}", "/warehouse/currentstock/{id}/{type}"})
-    public String updateCurrentStock(@PathVariable("id") Long id, @PathVariable("type") Optional<String> type, Model model, RedirectAttributes flash){
+    public String updateCurrentStock(@PathVariable("id") Long id, @PathVariable("type") Optional<String> type, Model model, RedirectAttributes flash, Principal principal){
         try {
             Boolean isIngredient = type.map(s -> s.equals("ingredient")).orElse(false);
             CurrentStockFormDTO currentStockFormDTO = warehouseService.originalCurrentStock(id, isIngredient);
             model.addAttribute("currentStockFormDTO", currentStockFormDTO);
+            model.addAttribute("username", principal.getName());
             return "warehouse/currentstock";
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");
+            model.addAttribute("username", principal.getName());
             return "redirect:/warehouse/list";
         }
     }
 
     @PostMapping(value = "/warehouse/currentstock")
-    public String updateCurrentStockPost(@Valid CurrentStockFormDTO currentStockFormDTO, BindingResult bindingResult, RedirectAttributes flash){
+    public String updateCurrentStockPost(@Valid CurrentStockFormDTO currentStockFormDTO, BindingResult bindingResult, RedirectAttributes flash, Model model, Principal principal){
         if (bindingResult.hasErrors()){
+            model.addAttribute("username", principal.getName());
             return "warehouse/currentstock";
         }
         try {
@@ -173,18 +188,19 @@ public class WarehouseController {
         } catch (Exception e){
             flash.addFlashAttribute("errorMessage", "재고 갱신 중 에러가 발생하였습니다.");
         }
+        model.addAttribute("username", principal.getName());
         return "redirect:"+currentStockFormDTO.getSourceUrl();
     }
 
     @PostMapping(value = "/warehouse/ingredient/{id}/refresh")
-    public String refreshIngredient(@PathVariable("id") Long id, Model model) throws Exception {
+    public String refreshIngredient(@PathVariable("id") Long id, Model model, Principal principal) throws Exception {
         try {
             IngredientStockInfoDTO ingredientStockInfoDTO = warehouseService.status2(id);
             model.addAttribute("ingredients", ingredientStockInfoDTO);
         } catch (Exception e) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
         }
-
+        model.addAttribute("username", principal.getName());
         return "warehouse/view2 :: #warehouse-data";
     }
 
