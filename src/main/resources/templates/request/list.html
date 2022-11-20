@@ -142,10 +142,13 @@
 
 <th:block layout:fragment="css">
     <style>
-        img:hover.hv {
+        /*img:hover.hv {
         width:20px;
         transform:scale(1.5);
         transition: transform.5s;
+        }*/
+        img.hv{
+            margin-left: 5px;
         }
     </style>
 </th:block>
@@ -153,40 +156,47 @@
 <div layout:fragment="content">
     <div class="card">
         <div class="card-body" id="request-data">
+            <div class="d-flex align-items-center mb-4">
+                <h4 class="card-title">발주 내역</h4>
+                <div class="ml-auto">
+                </div>
+            </div>
 
             <form role="form" method="get" th:object="${requests}">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <td>ID<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" onclick="refresh('id')" width="10"></td>
-                        <td>날짜<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" onclick="refresh('date')" width="10"></td>
-                        <td>재료<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" onclick="refresh('ingredient')" width="10"></td>
-                        <td>수량<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" onclick="refresh('amount')" width="10"></td>
-                        <td>가맹점<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" width="10" onclick="refresh('store')"></td>
-                        <td>창고<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" width="10" onclick="refresh('warehouse')"></td>
-                        <td>상태<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" width="10" onclick="refresh('status')"></td>
-                        <td></td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="request, status: ${requests.getContent()}">
-                        <td th:text="${request.id}"></td>
-                        <td>
-                            <a th:href="'/request/'+${request.id}" th:text="${request.date}"></a>
-                        </td>
-                        <td th:text="${request.ingredientName}"></td>
-                        <td th:text="${request.amount}"></td>
-                        <td th:text="${request.storeName}"></td>
-                        <td th:text="${request.warehouseName}"></td>
-                        <td th:text="${request.status}"></td>
-                        <td>
-                            <input th:if="${request.canConfirm}" type="button" class="btn btn-primary" value="승인" th:onclick="confirmRequest([[${request}]])">
-                            <input th:if="${request.canReject}" type="button" class="btn btn-primary" value="반려" th:onclick="rejectRequest([[${request}]])">
-                            <input th:if="${request.canCancel}" type="button" class="btn btn-primary" value="취소" th:onclick="cancelRequest([[${request}]])">
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table no-wrap v-middle mb-0">
+                        <thead>
+                        <tr class="border-0">
+                            <td class="font-14 font-weight-medium text-muted">ID<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" onclick="refresh('id')" width="10"></td>
+                            <td class="font-14 font-weight-medium text-muted">날짜<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" onclick="refresh('date')" width="10"></td>
+                            <td class="font-14 font-weight-medium text-muted px-2">재료<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" onclick="refresh('ingredient')" width="10"></td>
+                            <td class="font-14 font-weight-medium text-muted">수량<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" onclick="refresh('amount')" width="10"></td>
+                            <td class="font-14 font-weight-medium text-muted">가맹점<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" width="10" onclick="refresh('store')"></td>
+                            <td class="font-14 font-weight-medium text-muted">창고<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" width="10" onclick="refresh('warehouse')"></td>
+                            <td class="font-14 font-weight-medium text-muted">상태<img class="hv" th:src="@{/kokeetea/pngwing.com.png}" alt="" width="10" onclick="refresh('status')"></td>
+                            <td></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="request, status: ${requests.getContent()}">
+                            <td class="text-muted px-2 py-4 font-14" th:text="${request.id}"></td>
+                            <td class="text-muted px-2 py-4 font-14">
+                                <a th:href="'/request/'+${request.id}" th:text="${request.date}"></a>
+                            </td>
+                            <td class="text-muted px-2 py-4 font-14" th:text="${request.ingredientName}"></td>
+                            <td class="text-muted px-2 py-4 font-14" th:text="${request.amount}"></td>
+                            <td class="text-muted px-2 py-4 font-14" th:text="${request.storeName}"></td>
+                            <td class="text-muted px-2 py-4 font-14" th:text="${request.warehouseName}"></td>
+                            <td class="text-muted px-2 py-4 font-14" th:text="${request.status}"></td>
+                            <td class="text-muted px-2 py-4 font-14">
+                                <input th:if="${request.canConfirm}" type="button" class="btn btn-primary" value="승인" th:onclick="confirmRequest([[${request}]])">
+                                <input th:if="${request.canReject}" type="button" class="btn btn-primary" value="반려" th:onclick="rejectRequest([[${request}]])">
+                                <input th:if="${request.canCancel}" type="button" class="btn btn-primary" value="취소" th:onclick="cancelRequest([[${request}]])">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <div th:with="start=${(requests.number/maxPage)*maxPage + 1}, end=(${(requests.totalPages == 0) ? 1 : (start + (maxPage - 1) < requests.totalPages ? start + (maxPage - 1) : requests.totalPages)})" >
                     <ul class="pagination justify-content-center">
