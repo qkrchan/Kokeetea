@@ -61,17 +61,18 @@
                         </a>
                     </li>
                     <li class="sidebar-item" sec:authorize="isAuthenticated()">
-                        <a class="sidebar-link" th:href="@{/member/logout}" aria-expanded="false">
-                            <i data-feather="crosshair" class="feather-icon"></i>
-                            <span class="hide-menu">로그아웃</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-item" sec:authorize="isAuthenticated()('ROLE_ADMIN')">
                         <a class="sidebar-link" th:href="@{http://117.16.137.194:5000/mysqlMat}" aria-expanded="false">
                             <i data-feather="crosshair" class="feather-icon"></i>
                             <span class="hide-menu">데이터분석</span>
                         </a>
                     </li>
+                    <li class="sidebar-item" sec:authorize="isAuthenticated()">
+                        <a class="sidebar-link" th:href="@{/member/logout}" aria-expanded="false">
+                            <i data-feather="crosshair" class="feather-icon"></i>
+                            <span class="hide-menu">로그아웃</span>
+                        </a>
+                    </li>
+
                 </ul>
             </nav>
             <!-- End Sidebar navigation -->

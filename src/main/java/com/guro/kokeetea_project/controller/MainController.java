@@ -46,10 +46,7 @@ public class MainController {
         List<Integer> mainAvgList = null;
         try {
             mainAvgList = mainService.storeCount();
-            for (Integer mainAvg : mainAvgList) {
-                total += mainAvg;
 
-            }
             model.addAttribute("stat", requestService.stat());
         } catch (Exception e) {
             model.addAttribute("stat", new StatisticsDTO());
@@ -64,6 +61,9 @@ public class MainController {
         avg_77 = mainAvgList.get(7);
         avg_78 = mainAvgList.get(8);
         avg_79 = mainAvgList.get(9);
+
+        total = avg_70 + avg_71 +avg_72 + avg_73;
+
 
 
         avg_70 = (avg_70/total)*100;
