@@ -32,12 +32,66 @@ public class MainController {
         if (authentication == null || AnonymousAuthenticationToken.class.isAssignableFrom(authentication.getClass())) {
             return "redirect:/member/login";
         }
+        float total = 0;
+        float avg_70 = 0;
+        float avg_71 = 0;
+        float avg_72 = 0;
+        float avg_73 = 0;
+        float avg_74 = 0;
+        float avg_75 = 0;
+        float avg_76 = 0;
+        float avg_77 = 0;
+        float avg_78 = 0;
+        float avg_79 = 0;
+        List<Integer> mainAvgList = null;
         try {
+            mainAvgList = mainService.storeCount();
+            for (Integer mainAvg : mainAvgList) {
+                total += mainAvg;
 
+            }
+            model.addAttribute("stat", requestService.stat());
         } catch (Exception e) {
             model.addAttribute("stat", new StatisticsDTO());
         }
+        avg_70 = mainAvgList.get(0);
+        avg_71 = mainAvgList.get(1);
+        avg_72 = mainAvgList.get(2);
+        avg_73 = mainAvgList.get(3);
+        avg_74 = mainAvgList.get(4);
+        avg_75 = mainAvgList.get(5);
+        avg_76 = mainAvgList.get(6);
+        avg_77 = mainAvgList.get(7);
+        avg_78 = mainAvgList.get(8);
+        avg_79 = mainAvgList.get(9);
+
+
+        avg_70 = (avg_70/total)*100;
+        avg_71 = (avg_71/total)*100;
+        avg_72 = (avg_72/total)*100;
+        avg_73 = (avg_73/total)*100;
+        avg_74 = (avg_74/total)*100;
+        avg_75 = (avg_75/total)*100;
+        avg_76 = (avg_76/total)*100;
+        avg_77 = (avg_77/total)*100;
+        avg_78 = (avg_78/total)*100;
+        avg_79 = (avg_79/total)*100;
+        System.out.println(total);
+        System.out.println(avg_70);
+        System.out.println(avg_71);
+        System.out.println(avg_72);
+        System.out.println(avg_73);
         model.addAttribute("username", principal.getName());
+        model.addAttribute("avg_70", String.format("%.2f", avg_70));
+        model.addAttribute("avg_71", String.format("%.2f", avg_71));
+        model.addAttribute("avg_72", String.format("%.2f", avg_72));
+        model.addAttribute("avg_73", String.format("%.2f", avg_73));
+        model.addAttribute("avg_74", String.format("%.2f", avg_74));
+        model.addAttribute("avg_75", String.format("%.2f", avg_75));
+        model.addAttribute("avg_76", String.format("%.2f", avg_76));
+        model.addAttribute("avg_77", String.format("%.2f", avg_77));
+        model.addAttribute("avg_78", String.format("%.2f", avg_78));
+        model.addAttribute("avg_79", String.format("%.2f", avg_79));
 
         return "main";
     }
@@ -47,9 +101,6 @@ public class MainController {
         List<Integer> mainAvgList;
         try {
             mainAvgList = mainService.readRequest();
-            for (Integer mainAvg : mainAvgList) {
-                System.out.println(mainAvg.toString());
-            }
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -61,9 +112,6 @@ public class MainController {
         List<Integer> mainAvgList;
         try {
             mainAvgList = mainService.ingredindCount();
-            for (Integer mainAvg : mainAvgList) {
-                System.out.println(mainAvg.toString());
-            }
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -75,7 +123,6 @@ public class MainController {
         Object month;
         try {
             month = mainService.monthCount();
-            System.out.println(month.toString());
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
