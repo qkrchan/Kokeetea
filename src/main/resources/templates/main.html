@@ -98,7 +98,7 @@
                 dataType:"json",
                 cache   : false,
                 success: function(result,status){
-                    coff_count = result[0];
+                    coff_count = result[7];
                     hongtea_count= result[1];
                     greentea_avg = result[2];
 
@@ -138,7 +138,7 @@
 
             //금일발주 건수
             $.ajax({
-                url: "http://117.16.137.194:5000/todayCount",
+                url: "http://210.117.212.139:5000/todayCount",
                 type: "GET",
                 dataType:"json",
                 cache   : false,
@@ -147,6 +147,7 @@
                     current_store = result[0][0][1];
                     $("#current_count").html(current_count);
                     $("#current_store").html(current_store);
+                    console.log(result)
                 },
                 error: function(jqXHR, status, error){
                     alert("금일발주 건수가 실패하였습니다."+ jqXHR.responseText);
@@ -155,7 +156,7 @@
 
             //마지막월 평균 발주
             $.ajax({
-                url: "http://117.16.137.194:5000/getMonth",
+                url: "http://210.117.212.139:5000/getMonth",
                 type: "GET",
                 dataType:"json",
                 cache   : false,
@@ -173,7 +174,7 @@
             function line_click(){
                 //라인차트
                 $.ajax({
-                    url: "http://117.16.137.194:5000/getMonths",
+                    url: "http://210.117.212.139:5000/getMonths",
                     type: "GET",
                     dataType:"json",
                     cache   : false,
@@ -231,7 +232,7 @@
             function drawChart2() {
                 var data = google.visualization.arrayToDataTable([
                     ['Task', 'Hours per Day'],
-                    ['포르테',  coff_avg],
+                    ['포모나',  orange_avg],
                     ['아리아',  hongtea_avg],
                     ['칼리스',  milk_avg],
                     ['얼그레이', choco_avg],
@@ -376,7 +377,7 @@
                     <ul class="list-style-none mb-0">
                         <li>
                             <i class="fas fa-circle text-primary font-10 mr-2"></i>
-                            <span class="text-muted">포르테 총 주문건수</span>
+                            <span class="text-muted">포모나 총 주문건수</span>
                             <span class="text-dark float-right font-weight-medium" id="coff"></span>
                         </li>
                         <li class="mt-3">
