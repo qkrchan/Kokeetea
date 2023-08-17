@@ -17,9 +17,9 @@ public interface MainAvgRepository extends JpaRepository<MainAvg,Long> {
     List<Integer> ingredindCount();
 
     @Query(value = "SELECT " +
-            "  count(case when date between '2022-10-01' and '2022-10-31' then 1 end) AS '10월',count(case when date between '2022-09-01' and '2022-09-30' then 1 end) AS '9월'," +
-            "  count(case when date between '2022-08-01' and '2022-08-31' then 1 end) AS '8월',count(case when date between '2022-07-01' and '2022-07-31' then 1 end) AS '7월'," +
-            "  count(case when date between '2022-06-01' and '2022-06-30' then 1 end) AS '6월',count(case when date between '2022-05-01' and '2022-05-31' then 1 end) AS '5월'" +
+            "  count(case when date between '2023-10-01' and '2023-10-31' then 1 end) AS '10월',count(case when date between '2023-09-01' and '2023-09-30' then 1 end) AS '9월'," +
+            "  count(case when date between '2023-08-01' and '2023-08-31' then 1 end) AS '8월',count(case when date between '2023-07-01' and '2023-07-31' then 1 end) AS '7월'," +
+            "  count(case when date between '2023-06-01' and '2023-06-30' then 1 end) AS '6월',count(case when date between '2023-05-01' and '2023-05-31' then 1 end) AS '5월'" +
             "FROM " +
             " request",nativeQuery = true)
     Object monthCount();

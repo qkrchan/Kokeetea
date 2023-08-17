@@ -52,15 +52,15 @@ public class MainController {
             model.addAttribute("stat", new StatisticsDTO());
         }
         avg_70 = mainAvgList.get(0);
-        avg_71 = mainAvgList.get(1);
-        avg_72 = mainAvgList.get(2);
-        avg_73 = mainAvgList.get(3);
-        avg_74 = mainAvgList.get(4);
-        avg_75 = mainAvgList.get(5);
-        avg_76 = mainAvgList.get(6);
-        avg_77 = mainAvgList.get(7);
-        avg_78 = mainAvgList.get(8);
-        avg_79 = mainAvgList.get(9);
+//        avg_71 = mainAvgList.get(1);
+//        avg_72 = mainAvgList.get(2);
+//        avg_73 = mainAvgList.get(3);
+//        avg_74 = mainAvgList.get(4);
+//        avg_75 = mainAvgList.get(5);
+//        avg_76 = mainAvgList.get(6);
+//        avg_77 = mainAvgList.get(7);
+//        avg_78 = mainAvgList.get(8);
+//        avg_79 = mainAvgList.get(9);
 
         total = avg_70 + avg_71 +avg_72 + avg_73;
 

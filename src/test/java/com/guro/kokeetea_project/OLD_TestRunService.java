@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.guro.kokeetea_project.entity.*;
 import com.guro.kokeetea_project.repository.*;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,7 +36,8 @@ public class OLD_TestRunService {
     CurrentStockRepository currentStockRepository;
     @Autowired
     RequestRepository requestRepository;
-    
+
+
     public void init() {
         memberRepository.deleteAll();
         currentStockRepository.deleteAll();

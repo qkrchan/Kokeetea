@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class RequestController {
     private final RequestService requestService;
 
-    @GetMapping(value = {"/request/list","/request/list/{page}"})
+    @GetMapping(value = {"/request/list","/request/list/{page}"}) // 발주요청 리스트(본사에서 보는 내역)
     public String listRequest(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash, Principal principal){
         try {
             Pageable pageable = PageRequest.of(page.orElse(1)-1, 10);
@@ -50,7 +50,7 @@ public class RequestController {
         return "request/list";
     }
 
-    @GetMapping(value = {"/request/mylist","/request/mylist/{page}"})
+    @GetMapping(value = {"/request/mylist","/request/mylist/{page}"}) // 지점의 발주요청 리스트
     public String mylistRequest(@PathVariable("page") Optional<Integer> page, Principal principal, Model model, RedirectAttributes flash){
         try {
             Pageable pageable = PageRequest.of(page.orElse(1)-1, 10);
