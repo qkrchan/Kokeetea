@@ -37,4 +37,8 @@ public class Ingredient {
 
     @Column
     private Boolean isValid;
+
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
 }
