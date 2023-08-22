@@ -42,6 +42,17 @@
                 </div>
                 <p th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}" class="fieldError">Incorrect data</p>
 
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">공급사</span>
+                    </div>
+                    <select th:field="*{supplierId}" class="form-control">
+                        <option th:value="${null}" th:text="미배정" selected></option>
+                        <option th:value="${supplier.id}" th:text="${supplier.name}" th:each="supplier : ${suppliers}"></option>
+                    </select>
+                </div>
+                <p th:if="${#fields.hasErrors('supplierId')}" th:errors="*{supplierId}" class="fieldError">Incorrect data</p>
+
                 <button th:if="${#strings.isEmpty(ingredientFormDTO.id)}" th:formaction="@{/ingredient/create}" type="submit" class="btn btn-primary">등록</button>
                 <button th:unless="${#strings.isEmpty(ingredientFormDTO.id)}" th:formaction="@{/ingredient/update}" type="submit" class="btn btn-primary">수정</button>
                 <button th:onclick="window.location.href='/ingredient/list';" type="button" class="btn btn-primary">취소</button>

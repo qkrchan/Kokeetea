@@ -10,4 +10,5 @@ public class IngredientInfoDTO {
     private String name;
     private Long price;
     private String categoryName;
+    private String supplierName;
 }

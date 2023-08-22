@@ -64,6 +64,7 @@
                         <td>이름</td>
                         <td>가격</td>
                         <td>분류</td>
+                        <td>공급사</td>
                         <td></td>
                     </tr>
                     </thead>
@@ -73,6 +74,7 @@
                         <td th:text="${ingredient.name}"></td>
                         <td th:text="${ingredient.price}"></td>
                         <td th:text="${ingredient.categoryName}"></td>
+                        <td th:text="${ingredient.supplierName}"></td>
                         <td>
                             <input type="button" class="btn btn-primary" value="삭제" th:onclick="deleteIngredient(false, [[${ingredient}]])">
                             <input type="button" class="btn btn-primary" value="수정" th:onclick="location.href='/ingredient/update/'+[[${ingredient.id}]]">

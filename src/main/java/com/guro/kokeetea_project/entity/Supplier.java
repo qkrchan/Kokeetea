@@ -32,4 +32,7 @@ public class Supplier {
 
     @Column
     private String origin;
+
+    @Column
+    private Boolean isValid;
 }

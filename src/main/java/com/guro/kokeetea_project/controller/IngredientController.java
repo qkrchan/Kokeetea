@@ -47,6 +47,7 @@ public class IngredientController {
         try {
             model.addAttribute("ingredientFormDTO", new IngredientFormDTO());
             model.addAttribute("categories", ingredientService.categories());
+            model.addAttribute("suppliers", ingredientService.suppliers());
             model.addAttribute("username", principal.getName());
             return "ingredient/create";
         } catch (Exception e) {
@@ -61,6 +62,7 @@ public class IngredientController {
         try {
             if (bindingResult.hasErrors()){
                 model.addAttribute("categories", ingredientService.categories());
+                model.addAttribute("suppliers", ingredientService.suppliers());
                 model.addAttribute("username", principal.getName());
                 return "ingredient/create";
             }

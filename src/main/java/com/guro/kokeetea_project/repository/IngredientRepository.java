@@ -1,6 +1,7 @@
 package com.guro.kokeetea_project.repository;
 
 import com.guro.kokeetea_project.entity.Category;
+import com.guro.kokeetea_project.entity.Supplier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -20,4 +21,6 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
     Long countIngredient();
 
     void deleteByCategory(Category category);
+
+    void deleteBySupplier(Supplier supplier);
 }

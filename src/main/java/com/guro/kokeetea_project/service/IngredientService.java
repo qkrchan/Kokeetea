@@ -1,10 +1,7 @@
 package com.guro.kokeetea_project.service;
 
 import com.guro.kokeetea_project.dto.*;
-import com.guro.kokeetea_project.entity.Category;
-import com.guro.kokeetea_project.entity.CurrentStock;
-import com.guro.kokeetea_project.entity.Ingredient;
-import com.guro.kokeetea_project.entity.Warehouse;
+import com.guro.kokeetea_project.entity.*;
 import com.guro.kokeetea_project.repository.*;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +24,7 @@ public class IngredientService {
     private final CurrentStockRepository currentStockRepository;
     private final WarehouseRepository warehouseRepository;
     private final RequestRepository requestRepository;
+    private final SupplierRepository supplierRepository;
 
     @Transactional(readOnly = true)
     public Page<IngredientInfoDTO> list(Pageable pageable) throws Exception {
@@ -39,10 +37,15 @@ public class IngredientService {
             dto.setId(ingredient.getId());
             dto.setName(ingredient.getName());
             dto.setPrice(ingredient.getPrice());
-            if (ingredient.getCategory()!=null && ingredient.getCategory().getIsValid()) {
+            if (ingredient.getCategory()!=null &&  ingredient.getCategory().getIsValid()) {
                 dto.setCategoryName(ingredient.getCategory().getName());
             } else {
                 dto.setCategoryName("미배정");
+            }
+            if (ingredient.getSupplier()!=null &&  ingredient.getSupplier().getIsValid()) {
+                dto.setSupplierName(ingredient.getSupplier().getName());
+            } else {
+                dto.setSupplierName("미배정");
             }
             list.add(dto);
         }
@@ -72,10 +75,20 @@ public class IngredientService {
         ingredient.setName(ingredientFormDTO.getName());
         ingredient.setPrice(ingredientFormDTO.getPrice());
         ingredient.setCategory(null);
+        ingredient.setSupplier(null);
         if (ingredientFormDTO.getCategoryId() != null) {
             Category category = categoryRepository.findById(ingredientFormDTO.getCategoryId()).orElse(null);
             if (category!=null && category.getIsValid()) {
                 ingredient.setCategory(category);
+            }
+        }
+        ingredient.setIsValid(true);
+        ingredientRepository.save(ingredient);
+
+        if (ingredientFormDTO.getSupplierId() != null) {
+            Supplier supplier = supplierRepository.findById(ingredientFormDTO.getSupplierId()).orElse(null);
+            if (supplier!=null && supplier.getIsValid()) {
+                ingredient.setSupplier(supplier);
             }
         }
         ingredient.setIsValid(true);
@@ -137,6 +150,25 @@ public class IngredientService {
             CategoryInfoDTO dto = new CategoryInfoDTO();
             dto.setId(category.getId());
             dto.setName(category.getName());
+            list.add(dto);
+        }
+
+        return list;
+    }
+
+    @Transactional(readOnly = true)
+    public List<SupplierInfoDTO> suppliers() throws Exception {
+        List<Supplier> suppliers = supplierRepository.listSupplier();
+        List<SupplierInfoDTO> list = new ArrayList<>();
+
+        if (suppliers.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+
+        for (Supplier supplier : suppliers) {
+            SupplierInfoDTO dto = new SupplierInfoDTO();
+            dto.setId(supplier.getId());
+            dto.setName(supplier.getName());
             list.add(dto);
         }
 

@@ -18,4 +18,6 @@ public class IngredientFormDTO {
     private Long price;
 
     private Long categoryId;
+
+    private Long supplierId;
 }
