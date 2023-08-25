@@ -1,6 +1,7 @@
 package com.guro.kokeetea_project.controller;
 
 import com.guro.kokeetea_project.dto.StatisticsDTO;
+import com.guro.kokeetea_project.repository.StoreRepository;
 import com.guro.kokeetea_project.service.MainService;
 import com.guro.kokeetea_project.service.RequestService;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,8 @@ public class MainController {
 
     private final MainService mainService;
 
+    private final StoreRepository storeRepository;
+
     @GetMapping(value="/")
     public String main(Optional<Integer> page, Model model, Principal principal) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -48,19 +51,20 @@ public class MainController {
             mainAvgList = mainService.storeCount();
 
             model.addAttribute("stat", requestService.stat());
+            model.addAttribute("count", storeRepository.countStore());
         } catch (Exception e) {
             model.addAttribute("stat", new StatisticsDTO());
         }
         avg_70 = mainAvgList.get(0);
-//        avg_71 = mainAvgList.get(1);
-//        avg_72 = mainAvgList.get(2);
-//        avg_73 = mainAvgList.get(3);
-//        avg_74 = mainAvgList.get(4);
-//        avg_75 = mainAvgList.get(5);
-//        avg_76 = mainAvgList.get(6);
-//        avg_77 = mainAvgList.get(7);
-//        avg_78 = mainAvgList.get(8);
-//        avg_79 = mainAvgList.get(9);
+        avg_71 = mainAvgList.get(1);
+        avg_72 = mainAvgList.get(2);
+        avg_73 = mainAvgList.get(3);
+        avg_74 = mainAvgList.get(4);
+        avg_75 = mainAvgList.get(5);
+        avg_76 = mainAvgList.get(6);
+        avg_77 = mainAvgList.get(7);
+        avg_78 = mainAvgList.get(8);
+        avg_79 = mainAvgList.get(9);
 
         total = avg_70 + avg_71 +avg_72 + avg_73;
 
@@ -135,6 +139,7 @@ public class MainController {
         List<Integer> storeCount;
         try {
             storeCount = mainService.storeCount();
+
             System.out.println(storeCount.toString());
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
