@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+
+
+<div layout:fragment="content">
+  <div class="card">
+    <div class="card-body">
+      <iframe src="http://210.117.212.117:3000/d-solo/d09fe54c-016c-432f-a8ca-c4a3e6c6f3a0/ingredient?orgId=1&from=1693251724569&to=1693273324569&panelId=1" width="800" height="400" frameborder="0"></iframe>                        </div>
+    <hr>
+    <iframe src="http://210.117.212.117:3000/d-solo/b0cf48fa-15f6-44a8-95e4-dbbc768f8b13/amount?orgId=1&from=1677564530715&to=1693289330715&theme=light&panelId=1" width="800" height="400" frameborder="0"></iframe>
+    <hr>
+    <iframe src="http://210.117.212.117:3000/d-solo/f60fd7cc-b5cc-482f-9dad-cb32beb85aa0/ingredient-amount?orgId=1&from=1693271016453&to=1693292616453&theme=light&panelId=1" width="800" height="400" frameborder="0"></iframe>
+
+  </div>
+</div>
+
+</div>
+
+</html>
