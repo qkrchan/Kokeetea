@@ -18,5 +18,4 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     @Query("select count(su) from Supplier su where su.isValid = true")
     Long countSupplier();
 
-
 }

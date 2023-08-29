@@ -81,6 +81,7 @@ public class IngredientController {
             model.addAttribute("ingredientFormDTO", ingredientFormDTO);
             model.addAttribute("categories", ingredientService.categories());
             model.addAttribute("username", principal.getName());
+            model.addAttribute("suppliers", ingredientService.suppliers());
             return "ingredient/create";
         } catch (Exception e) {
             flash.addFlashAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");

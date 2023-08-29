@@ -7,6 +7,10 @@ import javax.persistence.*;
 
 import com.guro.kokeetea_project.constant.RequestStatus;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.concurrent.ThreadLocalRandom;
+
 @Entity
 @Table(name = "request")
 @Getter
@@ -35,4 +39,18 @@ public class Request extends TimeEntity{
 
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
+
+//    @Column(columnDefinition = "TIMESTAMP")
+//    private LocalDateTime date;
+//    public Request() {
+//        // 랜덤한 LocalDateTime 생성
+//        LocalDateTime startDate = LocalDateTime.of(2023, 1, 1, 0, 0);
+//        LocalDateTime endDate = LocalDateTime.of(2023, 8, 31, 23, 59);
+//
+//        long startEpochSecond = startDate.toEpochSecond(ZoneOffset.UTC);
+//        long endEpochSecond = endDate.toEpochSecond(ZoneOffset.UTC);
+//
+//        long randomEpochSecond = ThreadLocalRandom.current().nextLong(startEpochSecond, endEpochSecond);
+//        date = LocalDateTime.ofEpochSecond(randomEpochSecond, 0, ZoneOffset.UTC);
+//    }
 }

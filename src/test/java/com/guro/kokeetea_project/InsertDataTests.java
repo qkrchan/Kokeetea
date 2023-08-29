@@ -10,9 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SpringBootTest
 public class InsertDataTests {
@@ -129,7 +133,7 @@ public class InsertDataTests {
 
         for (int i = 0; i < 400; i++) {
             Request request = new Request();
-            request.setDate(LocalDateTime.now().minusMonths((long) Math.floor(0 + Math.random() * 18)));
+            request.setDate(LocalDateTime.now().minusMonths((long) Math.floor(0 + Math.random() * 18))); //
             request.setIngredient(ingredientRepository.listIngredient().get((int) Math.floor(Math.random() * ingredientRepository.countIngredient())));
             request.setAmount((long) Math.floor(1 + Math.random() * 12));
             request.setStore(storeRepository.listStore().get((int) Math.floor(Math.random() * storeRepository.countStore())));
@@ -138,4 +142,49 @@ public class InsertDataTests {
             requestRepository.save(request);
         }
     }
+
+    @Test
+    public void insertDummmies(){
+        for (int i = 0; i < 400; i++) {
+            Request request = new Request();
+//            request.setDate(LocalDateTime.now().minusMonths((long)Math.floor(0 + Math.random() * 18))); // 현재 날짜 기준으로 0~18개월전 월별 기준
+            // 랜덤한 LocalDateTime 생성
+            LocalDateTime startDate = LocalDateTime.of(2023, 1, 1, 0, 0);
+            LocalDateTime endDate = LocalDateTime.of(2023, 8, 31, 23, 59);
+
+            long startEpochSecond = startDate.toEpochSecond(ZoneOffset.UTC);
+            long endEpochSecond = endDate.toEpochSecond(ZoneOffset.UTC);
+
+            long randomEpochSecond = ThreadLocalRandom.current().nextLong(startEpochSecond, endEpochSecond);
+            LocalDateTime randomDateTime = LocalDateTime.ofEpochSecond(randomEpochSecond, 0, ZoneOffset.UTC);
+
+            // 생성한 LocalDateTime을 Request 객체의 date 및 finish_date에 설정
+            request.setDate(randomDateTime);
+
+            request.setIngredient(ingredientRepository.listIngredient().get((int) Math.floor(Math.random() * ingredientRepository.countIngredient())));
+            request.setAmount((long) Math.floor(1 + Math.random() * 12));
+            request.setStore(storeRepository.listStore().get((int) Math.floor(Math.random() * storeRepository.countStore())));
+            request.setWarehouse(request.getStore().getWarehouse());
+            request.setStatus(RequestStatus.PENDING);
+            requestRepository.save(request);
+        }
+    }
+
+//    @Test
+//    public void insertRandomDay(){
+//        //  order_date: start date~today
+//        //  FIXME: apache common lang3 으로 변경할 것
+//        LocalDate startDate = LocalDate.of(2023, 8, 23); //start date
+//        long start = startDate.toEpochDay();
+//
+//        LocalDate endDate = LocalDate.now(); //end date
+//        long end = endDate.toEpochDay();
+//
+//        long randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();
+//        // 랜덤 date
+//        LocalDate order_date = LocalDate.ofEpochDay(randomEpochDay);
+//        // 오늘 날짜로 넣을 때
+////        LocalDate order_date = LocalDate.of(2022, 12, 1);
+//        System.out.println(order_date);
+//    }
 }

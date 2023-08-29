@@ -114,10 +114,17 @@ public class IngredientService {
         ingredient.setName(ingredientFormDTO.getName());
         ingredient.setPrice(ingredientFormDTO.getPrice());
         ingredient.setCategory(null);
+        ingredient.setSupplier(null);
         if (ingredientFormDTO.getCategoryId() != null) {
             Category category = categoryRepository.findById(ingredientFormDTO.getCategoryId()).orElse(null);
             if (category!=null && category.getIsValid()) {
                 ingredient.setCategory(category);
+            }
+        }
+        if (ingredientFormDTO.getSupplierId() != null) {
+            Supplier supplier = supplierRepository.findById(ingredientFormDTO.getSupplierId()).orElse(null);
+            if (supplier!=null && supplier.getIsValid()) {
+                ingredient.setSupplier(supplier);
             }
         }
         ingredientRepository.save(ingredient);

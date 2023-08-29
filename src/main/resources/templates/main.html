@@ -280,6 +280,33 @@
 
         });
 
+        //실시간 발주 업데이트~~
+        function updateData() { // 발주 데이터 실시간 업데이트
+            $.ajax({
+                url: "http://localhost:5000/todayCount", // 데이터 분석해줄 Flask 경로
+                type: "GET",
+                dataType: "json",
+                cache: false,
+                success: function(result, status) { // 분석된 데이터 받아오는 게 성공할때
+                    current_count = result[0][0][0];
+                    current_store = result[0][0][1];
+                    $("#current_count").html(current_count); // id를 current_count로 지정 그리고, html에서 선택된 요소를 업데이트
+                    $("#current_store").html(current_store);
+                    console.log(result);
+                },
+                error: function(jqXHR, status, error) {
+                    alert("금일발주 건수가 실패하였습니다." + jqXHR.responseText);
+                },
+                complete: function() {
+                    setTimeout(updateData, 1000); // 실시간으로 모니터링하기때문에 1초마다 업데이트 시도
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            updateData(); // html 페이지 로드 후 업데이트 시작
+        });
+
 
 
 

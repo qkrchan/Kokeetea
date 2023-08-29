@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="supplier")
@@ -35,4 +37,17 @@ public class Supplier {
 
     @Column
     private Boolean isValid;
+
+    @OneToMany(mappedBy = "supplier")
+    private List<Ingredient> ingredient = new ArrayList<>();
+
+    public void addIngredient(Ingredient ingredient) {
+        if (!this.ingredient.contains(ingredient)) {
+            this.ingredient.add(ingredient);
+        }
+        if (ingredient.getSupplier() != this) {
+            ingredient.setSupplier(this);
+        }
+    }
+
 }

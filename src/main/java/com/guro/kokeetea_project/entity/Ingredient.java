@@ -41,4 +41,14 @@ public class Ingredient {
     @ManyToOne
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
+
+    public void setSupplier(Supplier supplier) {
+        if (this.supplier != null) {
+            this.supplier.getIngredient().remove(this);
+        }
+        this.supplier = supplier;
+        if (supplier != null) {
+            supplier.addIngredient(this);
+        }
+    }
 }
