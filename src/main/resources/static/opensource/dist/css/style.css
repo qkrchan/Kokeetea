@@ -7595,6 +7595,7 @@ a.text-purple:hover, a.text-purple:focus {
   /*Sidebar position*/
   /*Header position*/
   /*Boxed Layout*/ }
+
   #main-wrapper[data-layout="vertical"] .topbar .top-navbar .navbar-header {
     transition: 0.2s ease-in; }
   #main-wrapper[data-layout="vertical"][data-sidebartype="full"] .page-wrapper {
@@ -7616,6 +7617,7 @@ a.text-purple:hover, a.text-purple:focus {
     box-shadow: 1px 0 80px rgba(0, 0, 0, 0.2); }
   #main-wrapper[data-layout="vertical"][data-boxed-layout="boxed"][data-header-position="fixed"] .topbar {
     max-width: 1200px; }
+
 
 /*******************
  Vertical responsive layout

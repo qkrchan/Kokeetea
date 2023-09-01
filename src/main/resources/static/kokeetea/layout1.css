@@ -18,6 +18,12 @@ body{
     margin-right:20px;
 }
 
+#c{
+    bottom: 0;
+    position: fixed;
+    width: auto;
+}
+
 .logo-icon{float:left; width:10px; height:10px;}
 .logo-text{float:left; padding-top: 10px;
     margin-left: 15px;
